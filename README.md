@@ -39,15 +39,15 @@ Para desarrollo local, estas mismas variables van en `api/local.settings.json` (
 
 ## Deploy
 
-El primer deploy se hizo manual, sin CI/CD, desde la SWA CLI (no está conectado a GitHub Actions todavía):
+CI/CD vía GitHub Actions ([.github/workflows/azure-static-web-apps.yml](.github/workflows/azure-static-web-apps.yml)): cada push a `main` despliega automáticamente el sitio + API a Azure Static Web Apps. El token de despliegue vive como secret de GitHub (`AZURE_STATIC_WEB_APPS_API_TOKEN`), nunca en el repo.
+
+Deploy manual (fallback, si hace falta forzar un deploy sin pasar por Actions):
 
 ```bash
 # desde la carpeta padre del proyecto (swa deploy falla si se corre desde dentro del app_location)
 SWA_CLI_DEPLOYMENT_TOKEN=$(az staticwebapp secrets list --name <static-web-app-name> --resource-group <resource-group> --query "properties.apiKey" -o tsv) \
   npx --yes @azure/static-web-apps-cli deploy "JMX WEB" --api-location "JMX WEB/api" --env production
 ```
-
-Pendiente decidir si se conecta el repo a GitHub para que el deploy sea automático en cada push.
 
 ## Pendientes
 
