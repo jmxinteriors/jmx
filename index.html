@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JMX INTERIORS LTD | Edmonton Drywall, Basements & Painting</title>
+    <meta name="description" content="JMX Interiors Ltd — drywall boarding, taping & mudding, basement development, texture removal, and interior painting in Edmonton, St. Albert, Sherwood Park, Spruce Grove & Leduc. Free quotes.">
+    <link rel="icon" type="image/webp" href="images/logo.webp">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="JMX INTERIORS LTD | Edmonton Drywall, Basements & Painting">
+    <meta property="og:description" content="Quality boarding, taping, mudding, basement development, and interior painting for Edmonton homes & commercial spaces. Get a free quote.">
+    <meta property="og:image" content="images/imagen (1).webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JMX INTERIORS LTD | Edmonton Drywall, Basements & Painting">
+    <meta name="twitter:description" content="Quality boarding, taping, mudding, basement development, and interior painting for Edmonton homes & commercial spaces.">
+    <meta name="twitter:image" content="images/imagen (1).webp">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HomeAndConstructionBusiness",
+        "name": "JMX Interiors Ltd",
+        "telephone": "+1-780-860-5239",
+        "email": "jmxinteriors@outlook.com",
+        "areaServed": ["Edmonton", "St. Albert", "Sherwood Park", "Spruce Grove", "Leduc"],
+        "openingHoursSpecification": [
+            { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "07:00", "closes": "19:00" }
+        ],
+        "sameAs": ["https://instagram.com/jmxinteriors"]
+    }
+    </script>
+
+    <style>
+        :root {
+            --gold-color: #D4AF37; 
+            --gold-hover: #b59021;
+            --dark-bg: #0a0a0a;
+            --dark-secondary: #141414;
+            --silver-text: #d1d1d1;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            line-height: 1.6; 
+            background-color: var(--dark-bg);
+            color: var(--silver-text);
+            scroll-behavior: smooth;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: rgba(0,0,0,0.95);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--gold-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+	/* AJUSTE DE LOGO: Más grande y sin distorsión */
+        .logo-container {
+            display: flex;
+            align-items: center;
+	}
+        .logo-img { height: 90px; width: auto; display: block; object-fit: contain; }
+
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: var(--white); 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            font-weight: 700;
+	    letter-spacing: 1px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--gold-color); transition: 0.3s; }
+
+        .btn-phone-link {
+            background: var(--gold-color);
+            color: var(--dark-bg);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 900;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            color: var(--white);
+            text-transform: uppercase;
+            font-weight: 400;
+            letter-spacing: 1px;
+            line-height: 1.05;
+        }
+        .hero-content h1 span { color: var(--gold-color); }
+        .hero-content p { font-size: 1.2rem; margin: 20px 0 35px; color: #eee; }
+
+        /* --- SERVICES --- */
+        .services { padding: 80px 20px; background: var(--dark-secondary); }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--white); text-transform: uppercase; letter-spacing: 1px; }
+        .section-title .bar { width: 80px; height: 4px; background: var(--gold-color); margin: 15px auto; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .service-card {
+            background: #1a1a1a;
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+        .service-card:hover { border-color: var(--gold-color); transform: translateY(-5px); }
+        .service-card i { font-size: 3rem; color: var(--gold-color); margin-bottom: 20px; }
+        .service-card h3 { color: var(--white); text-transform: uppercase; margin-bottom: 15px; font-size: 1.2rem; }
+
+        /* --- THE JMX DIFFERENCE (BEFORE & AFTER) --- */
+        #difference { padding: 80px 20px; background: #0a0a0a; }
+        .ba-container {
+            max-width: 1000px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .ba-item { position: relative; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
+        .ba-item img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+        .ba-label {
+            position: absolute;
+            top: 15px; left: 15px;
+            padding: 5px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 17px 42px;
+            background: var(--gold-color);
+            border: 2px solid var(--gold-color);
+            color: var(--dark-bg);
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-primary:hover { background: var(--gold-hover); border-color: var(--gold-hover); }
+
+        .btn-work {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            border: 1px solid #555;
+            color: #ccc;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-work:hover { border-color: var(--gold-color); color: var(--gold-color); }
+
+        /* --- GALLERY --- */
+        .gallery-section { padding: 80px 0; background: var(--dark-secondary); }
+        .gallery-header { text-align: center; margin-bottom: 50px; }
+        .gallery-header p { max-width: 600px; margin: 15px auto 0; }
+
+        .slider-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 0 40px 40px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-color) #222;
+        }
+        .slider-container::-webkit-scrollbar { height: 8px; }
+        .slider-container::-webkit-scrollbar-thumb { background: var(--gold-color); border-radius: 10px; }
+
+        .slider-item {
+            flex: 0 0 400px;
+            scroll-snap-align: center;
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+        .slider-item:hover { transform: translateY(-10px); border-color: var(--gold-color); }
+        .slider-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+        .slider-caption { padding: 20px; text-align: center; background: #111; border-top: 2px solid var(--gold-color); }
+        .slider-caption h4 { color: var(--white); font-size: 0.9rem; text-transform: uppercase; }
+        .scroll-hint { text-align: center; color: var(--gold-color); font-size: 0.9rem; }
+
+        .protection { padding: 80px 20px; text-align: center; background: #0a0a0a; }
+        .protection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+        }
+        .prot-card { padding: 40px; background: #1a1a1a; border: 1px dashed var(--gold-color); border-radius: 10px; }
+        .prot-card i { font-size: 3rem; color: var(--gold-color); margin-bottom: 20px; }
+        .prot-card h3 { color: var(--white); margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .slider-item { flex: 0 0 300px; }
+        }
+
+        /* --- CONTACT FORM --- */
+        .contact-section { padding: 80px 20px; background: var(--dark-secondary); }
+        .contact-container { max-width: 600px; margin: auto; }
+        .contact-form { display: grid; gap: 15px; }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: white;
+            font-family: inherit;
+        }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--gold-color); outline: none; }
+        .contact-btn {
+            background: var(--gold-color);
+            color: black;
+            padding: 15px;
+            font-weight: bold;
+            border: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .contact-btn:hover { background: var(--gold-hover); }
+        .contact-btn:disabled { opacity: 0.6; cursor: default; }
+
+        .hp-field {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* --- REVIEWS --- */
+        .reviews-section { padding: 80px 20px; background: #0a0a0a; }
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .review-card { background: #1a1a1a; padding: 25px; border: 1px solid #222; }
+        .review-stars { color: var(--gold-color); margin-bottom: 10px; letter-spacing: 2px; }
+        .review-card h4 { color: var(--white); margin-bottom: 10px; text-transform: uppercase; font-size: 1rem; }
+        .review-card p { color: var(--silver-text); font-size: 0.9rem; }
+        .review-form-container { max-width: 600px; margin: auto; }
+        .review-form-container h3 { color: var(--white); text-align: center; margin-bottom: 20px; text-transform: uppercase; }
+        .review-form { display: grid; gap: 15px; }
+        .review-form input, .review-form select, .review-form textarea {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            font-family: inherit;
+        }
+        .review-form input:focus, .review-form select:focus, .review-form textarea:focus { border-color: var(--gold-color); outline: none; }
+        .review-status { text-align: center; margin-top: 15px; font-size: 0.9rem; }
+
+        /* --- FOOTER --- */
+        footer { background: #000; padding: 60px 20px 20px; border-top: 4px solid var(--gold-color); }
+        .footer-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        .footer-item h4 { color: var(--white); margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        .footer-item a, .footer-item p { color: #999; text-decoration: none; margin-bottom: 10px; display: block; }
+        .social-icons { display: flex; justify-content: center; gap: 20px; font-size: 1.5rem; }
+        .social-icons a { color: var(--gold-color); }
+
+        /* --- FLOATING BUTTONS --- */
+        .floating-container { position: fixed; bottom: 30px; right: 30px; z-index: 2000; display: flex; flex-direction: column; gap: 15px; }
+        
+        .float-btn {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .quote-float { background: #1a1a1a; border: 2px solid var(--gold-color); color: var(--gold-color); font-size: 22px; }
+        .whatsapp-float { background: #25d366; }
+        .float-btn:hover { transform: scale(1.1); }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle { display: block; order: 1; }
+            .btn-phone-link { order: 2; }
+            nav { order: 3; width: 100%; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+                margin-top: 15px;
+            }
+            .nav-links.nav-open { display: flex; }
+            .nav-links li { border-top: 1px solid #222; }
+            .nav-links a { display: block; padding: 15px 0; }
+            .container { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img src="images/logo.webp" alt="JMX Interiors" class="logo-img">
+            </div>
+
+            <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#services">Services</a></li>
+		    <li><a href="#gallery">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <a href="tel:+17808605239" class="btn-phone-link">
+                <i class="fas fa-phone"></i> (780) 860-5239
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>EXPERT<span> DRYWALL</span><br>& Interior Finishing </h1>
+            <p>Quality Boarding, Taping, and Painting for Edmonton Homes & Commercial Spaces.</p>
+            <a href="#contact" class="btn-primary">Get Free Quote</a>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="section-title">
+            <h2>Our Services</h2>
+            <div class="bar"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card"><i class="fas fa-border-all"></i><h3>Drywall Boarding</h3><p>Precise installation for basements, renovations, and new builds.</p></div>
+            <div class="service-card"><i class="fas fa-tape"></i><h3>Mud & Tape</h3><p>Level 4 & 5 Expert taping and multi-coat mudding for perfectly seamless,paint-ready walls.</p></div>
+            <div class="service-card"><i class="fas fa-hammer"></i><h3>Basement Development</h3><p>Full interior build-outs for residential homes.</p></div>
+            <div class="service-card"><i class="fas fa-eraser"></i><h3>Texture Removal</h3><p>Professional popcorn removal. We scrape, sand, and skim-coat for a modern flat finish.</p></div>
+            <div class="service-card"><i class="fas fa-paint-roller"></i><h3>Interior Painting</h3><p>Premium interior painting services with sharp lines and uniform coverage.</p></div>
+            <div class="service-card"><i class="fas fa-spray-can"></i><h3>Ceiling Textures</h3><p>Professional spray-applied Knockdown Popcorn and Splatter textures for a uniform ceiling look.Professional spray-applied knockdown and splatter.</p></div>
+        </div>
+    </section>
+
+    <section id="difference">
+        <div class="section-title">
+            <h2>The JMX Difference</h2>
+            <div class="bar"></div>
+        </div>
+        <div class="ba-container">
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/imagen (1).webp" alt="Before Taping">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/imagen (2).webp" alt="After Mudding">
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <a href="#gallery" class="btn-work">View All Projects</a>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery-section">
+        <div class="gallery-header">
+            <div class="section-title">
+                <h2>Project Gallery</h2>
+                <div class="bar"></div>
+            </div>
+            <p>A closer look at our craftsmanship and professional standards.</p>
+        </div>
+
+        <div class="slider-container" id="gallery-slider"></div>
+        <p class="scroll-hint"><i class="fas fa-arrows-alt-h"></i> Scroll to explore more</p>
+
+        <div class="protection">
+            <h2 style="font-family: 'Bebas Neue', sans-serif; color: var(--white); text-transform: uppercase; font-size: 3rem; letter-spacing: 1px;">Job Site Protection</h2>
+            <div style="width: 80px; height: 4px; background: var(--gold-color); margin: 20px auto;"></div>
+            <p style="max-width: 800px; margin: auto;">We understand that we are working in your home or office. JMX Interiors takes pride in keeping a clean and safe job site.</p>
+            <div class="protection-grid">
+                <div class="prot-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Full Masking</h3>
+                    <p>We cover cabinets, furniture, and appliances with professional-grade plastic to prevent dust and paint damage.</p>
+                </div>
+                <div class="prot-card">
+                    <i class="fas fa-layer-group"></i>
+                    <h3>Floor Runners</h3>
+                    <p>We use heavy-duty floor protection to ensure your hardwood, tile, or carpet remains untouched.</p>
+                </div>
+                <div class="prot-card">
+                    <i class="fas fa-wind"></i>
+                    <h3>Dust Containment</h3>
+                    <p>By using dust barriers and HEPA vacuums, we keep the mess contained to the work area only.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="section-title">
+            <h2>Request a Quote</h2>
+            <div class="bar"></div>
+        </div>
+        <div class="contact-container">
+            <form class="contact-form" id="quote-form">
+                <label for="quote-name" class="sr-only">Your Name</label>
+                <input type="text" id="quote-name" name="name" placeholder="Your Name" required>
+                <label for="quote-phone" class="sr-only">Phone Number</label>
+                <input type="tel" id="quote-phone" name="phone" placeholder="Phone Number" required
+                    pattern="[0-9+\-\s()]{7,20}" title="Enter a valid phone number (digits, spaces, +, -, ( ) allowed)">
+                <label for="quote-email" class="sr-only">Your Email</label>
+                <input type="email" id="quote-email" name="email" placeholder="Your Email" required
+                    pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="Enter a valid email address">
+                <label for="quote-message" class="sr-only">Tell us about your project</label>
+                <textarea id="quote-message" name="message" rows="5" placeholder="Tell us about your project..." required></textarea>
+                <label for="quote-website" class="sr-only">Leave this field empty</label>
+                <input type="text" id="quote-website" name="website" class="hp-field" tabindex="-1" autocomplete="off">
+                <button type="submit" class="contact-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="reviews" class="reviews-section">
+        <div class="section-title">
+            <h2>Client Reviews</h2>
+            <div class="bar"></div>
+        </div>
+        <div class="reviews-container" id="reviews-list"></div>
+        <div class="review-form-container">
+            <h3>Leave a Review</h3>
+            <form class="review-form" id="review-form">
+                <label for="review-name" class="sr-only">Your Name</label>
+                <input type="text" id="review-name" name="name" placeholder="Your Name" required>
+                <label for="review-rating" class="sr-only">Rating</label>
+                <select id="review-rating" name="rating" required>
+                    <option value="">Rating</option>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="1">1 - Terrible</option>
+                </select>
+                <label for="review-comment" class="sr-only">Share your experience</label>
+                <textarea id="review-comment" name="comment" rows="4" placeholder="Share your experience..." required></textarea>
+                <label for="review-website" class="sr-only">Leave this field empty</label>
+                <input type="text" id="review-website" name="website" class="hp-field" tabindex="-1" autocomplete="off">
+                <button type="submit" class="contact-btn">Submit Review</button>
+            </form>
+            <p id="review-status" class="review-status"></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-item">
+                <h4>Contact Info</h4>
+                <p>780-860-5239</p>
+                <p>jmxinteriors@outlook.com</p>
+            </div>
+            <div class="footer-item">
+                <h4>Hours</h4>
+                <p>Mon - Sat: 7:00 AM - 7:00 PM</p>
+                <p>Sunday: Closed</p>
+            </div>
+            <div class="footer-item">
+                <h4>Service Area</h4>
+                <p>Edmonton, St. Albert, Sherwood Park, Spruce Grove & Leduc.</p>
+            </div>
+            <div class="footer-item">
+                <h4>Follow Us</h4>
+		<p>JMX INTERIORS LTD <br> Quality you can trust.</p>
+                <div class="social-icons">
+                    <a href="https://instagram.com/jmxinteriors" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 40px; color: #777; font-size: 0.7rem;">&copy; 2026 JMX INTERIORS LTD.</p>
+    </footer>
+
+    <div class="floating-container">
+        <a href="#contact" class="float-btn quote-float" title="Get a Quote" aria-label="Request a quote">
+            <i class="fas fa-file-invoice-dollar"></i>
+        </a>
+        <a href="https://wa.me/17808605239?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20my%20project..." class="float-btn whatsapp-float" target="_blank" aria-label="Contact us on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+
+        const GALLERY_ITEMS = [
+            { src: 'images/imagen (3).webp', alt: 'Work 1', caption: 'Commercial Hallway Taping' },
+            { src: 'images/imagen (4).webp', alt: 'Work 2', caption: 'Specialty Ceiling Detail & Cutouts' },
+            { src: 'images/imagen (5).webp', alt: 'Work 3', caption: 'Office Mudding & Finishing' },
+            { src: 'images/imagen (6).webp', alt: 'Work 6', caption: 'Primed Commercial Space' },
+            { src: 'images/imagen (7).webp', alt: 'Work 7', caption: 'Basement Development' },
+            { src: 'images/imagen (8).webp', alt: 'Work 8', caption: 'Smooth Basement Finish' },
+            { src: 'images/imagen (9).webp', alt: 'Work 9', caption: 'Kitchen Cabinet Protection' },
+            { src: 'images/imagen (10).webp', alt: 'Work 10', caption: 'Furniture & Dust Barriers' },
+            { src: 'images/imagen (11).webp', alt: 'Work 11', caption: 'Stairwell Drywall Phase' },
+            { src: 'images/imagen (12).webp', alt: 'Work 12', caption: 'Profesional Mudtape and ceiling paint Work' },
+            { src: 'images/imagen (13).webp', alt: 'Work 13', caption: 'Commercial Site Protection & Dust Control' },
+        ];
+
+        function renderGallery() {
+            const container = document.getElementById('gallery-slider');
+            container.innerHTML = GALLERY_ITEMS.map((item) => `
+                <div class="slider-item">
+                    <img src="${item.src}" alt="${escapeHtml(item.alt)}" loading="lazy">
+                    <div class="slider-caption"><h4>${escapeHtml(item.caption)}</h4></div>
+                </div>
+            `).join('');
+        }
+        renderGallery();
+
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+        navToggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('nav-open');
+            navToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+        navLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                navLinks.classList.remove('nav-open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (!navLinks.classList.contains('nav-open')) return;
+            if (navLinks.contains(e.target) || navToggle.contains(e.target)) return;
+            navLinks.classList.remove('nav-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        });
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        document.getElementById('quote-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('.contact-btn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            try {
+                const res = await fetch(`${API_BASE}/quote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: form.name.value,
+                        phone: form.phone.value,
+                        email: form.email.value,
+                        message: form.message.value,
+                        website: form.website.value,
+                    }),
+                });
+                if (!res.ok) throw new Error('Request failed');
+                form.reset();
+                btn.textContent = 'Sent! We will contact you soon.';
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = 'Error — please call us directly';
+                setTimeout(() => { btn.textContent = originalText; }, 4000);
+            }
+        });
+
+        document.getElementById('review-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const status = document.getElementById('review-status');
+            try {
+                const res = await fetch(`${API_BASE}/review`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: form.name.value,
+                        rating: form.rating.value,
+                        comment: form.comment.value,
+                        website: form.website.value,
+                    }),
+                });
+                if (!res.ok) throw new Error('Request failed');
+                form.reset();
+                status.style.color = 'var(--gold-color)';
+                status.textContent = 'Thank you! Your review will appear once approved.';
+            } catch (err) {
+                status.style.color = '#d9534f';
+                status.textContent = 'Something went wrong. Please try again later.';
+            }
+        });
+
+        async function loadReviews() {
+            const container = document.getElementById('reviews-list');
+            container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Loading reviews...</p>';
+            try {
+                const res = await fetch(`${API_BASE}/reviews`);
+                const reviews = await res.json();
+                if (!reviews.length) {
+                    container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No reviews yet — be the first!</p>';
+                    return;
+                }
+                container.innerHTML = reviews.map((r) => {
+                    const stars = '★'.repeat(r.calificacion) + '☆'.repeat(5 - r.calificacion);
+                    return `
+                        <div class="review-card">
+                            <div class="review-stars">${stars}</div>
+                            <h4>${escapeHtml(r.nombre)}</h4>
+                            <p>${escapeHtml(r.comentario)}</p>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                container.innerHTML = '';
+            }
+        }
+
+        loadReviews();
+    </script>
+
+</body>
+</html>
