@@ -1,62 +1,130 @@
-# JMX Interiors — Website
+# JMX Interiors — Website & Serverless Backend
 
-Sitio de JMX Interiors Ltd (drywall, basement development y painting en Edmonton, AB). Sitio estático (`index.html`) + API serverless en Azure Functions, desplegado en Azure Static Web Apps.
+Sitio web corporativo y backend serverless para **JMX Interiors Ltd** (especialistas en drywall, desarrollo de sótanos/basements, framing y pintura en Edmonton, AB). 
 
-## Producción
+Alojado y desplegado de forma continua en **Azure Static Web Apps (SWA)** con backend impulsado por **Azure Functions (Node.js v4)** e integrado con **Microsoft Graph API**.
 
-- **URL pública**: https://www.jmxinteriors.ca (el apex `jmxinteriors.ca` redirige a `www` vía forwarding de GoDaddy)
-- Hosting: Azure Static Web Apps, Free tier, región Central US.
-- Los identificadores del recurso (suscripción, resource group, nombre del Static Web App) no se documentan aquí — consultarlos directo en el portal de Azure o con quien tenga acceso.
+---
 
-## Estructura
+## 🌐 Producción
 
+- **Dominio principal**: [https://www.jmxinteriors.ca](https://www.jmxinteriors.ca)
+- **Redirección de dominio apex**: `jmxinteriors.ca` redirige automáticamente a `www.jmxinteriors.ca` vía DNS/forwarding en GoDaddy.
+- **Infraestructura de Hosting**: Azure Static Web Apps (Free tier, región Central US).
+- **CI/CD Automático**: Conectado a GitHub Actions. Cada `push` a la rama `main` ejecuta la build y despliega a producción en Azure en ~1-2 minutos.
+
+---
+
+## 📁 Estructura del Repositorio
+
+```text
+├── index.html                 # Frontend principal autónomo (Hero, Servicios, Antes/Después, Galería, Cotizador, Reviews, Contacto)
+├── images/                    # Fotografías de proyectos (.webp optimizadas) y logotipo corporativo
+├── staticwebapp.config.json   # Configuración de SWA (rutas públicas /api/*, fallback SPA, headers de seguridad CSP)
+├── robots.txt, sitemap.xml    # Configuración de indexación y SEO
+├── AGENTS.md                  # Contexto y directrices para agentes de IA (Antigravity / Gemini)
+├── CLAUDE.md                  # Contexto y directrices para Claude Code
+├── README.md                  # Documentación principal del repositorio y operaciones
+├── .github/
+│   └── workflows/
+│       └── azure-static-web-apps.yml # Pipeline de CI/CD para despliegue automático en Azure
+└── api/                       # Backend Serverless en Azure Functions (Node.js v4)
+    ├── package.json           # Dependencias (@azure/functions, @azure/msal-node)
+    ├── host.json              # Configuración del host de Azure Functions
+    ├── src/
+    │   ├── functions/
+    │   │   ├── quote.js       # POST /api/quote   -> Valida, guarda cotización en Excel OneDrive y envía correo
+    │   │   ├── review.js      # POST /api/review  -> Valida y guarda reseña de cliente en Excel (Estatus=pending)
+    │   │   └── reviews.js     # GET  /api/reviews -> Retorna las reseñas aprobadas (Estatus=approved)
+    │   ├── graph.js           # Cliente Microsoft Graph API (MSAL client-credentials, Excel Workbook & Mail)
+    │   └── security.js        # Validación anti-bots (honeypot) y limitador de tasa (rate-limit por IP)
+    └── scripts/
+        └── create-excel-file.js # Script inicial de bootstrapping para aprovisionar las tablas en OneDrive
 ```
-index.html                 # Sitio completo (hero, servicios, galería, quote form, reviews, footer)
-images/                    # Fotos de galería (.webp) + logo
-staticwebapp.config.json   # Rutas, headers de seguridad (CSP, etc.) para Azure Static Web Apps
-robots.txt, sitemap.xml
-api/                       # Azure Functions (Node.js)
-  src/functions/
-    quote.js               # POST /api/quote   -> agrega fila a tabla Excel "Quotes" + envía correo
-    review.js               # POST /api/review  -> agrega fila a tabla Excel "Reviews" (Estatus=pending)
-    reviews.js               # GET  /api/reviews -> devuelve reviews con Estatus=approved
-  src/graph.js              # Cliente de Microsoft Graph API (client credentials / MSAL)
-  src/security.js           # Rate-limit por IP + honeypot anti-spam
-  scripts/create-excel-file.js  # Script one-off: crea el workbook con las tablas Quotes/Reviews vía Graph
-```
 
-## Backend: Microsoft Graph, no base de datos separada
+---
 
-El formulario de cotización y el de reviews escriben directo a un Excel en OneDrive/SharePoint vía Microsoft Graph API (tablas `Quotes` y `Reviews`), y el de cotización además dispara un correo de notificación vía Graph (`sendMail`). Autenticación: **App Registration en Entra ID** (tenant JMX INTERIORS LTD) con permisos de aplicación (`Files.ReadWrite.All`, `Mail.Send`), flujo client-credentials (sin usuario logueado).
+## 🏗️ Arquitectura y Funcionamiento
 
-Las reviews nuevas quedan en estatus `pending` y no se muestran en el sitio; para aprobarlas se edita manualmente la columna `Estatus` a `approved` directo en el Excel — no hay panel de administración.
+### 1. Frontend (`index.html`)
+- **Zero-Build**: HTML5 y CSS3 nativo puro (estilos contenidos dentro de un bloque `<style>`), sin bundlers ni frameworks pesados para máxima velocidad de carga.
+- **Rendimiento y SEO**: Imágenes en formato `.webp` con carga diferida (`loading="lazy"`), metadatos Open Graph, Schema.org `LocalBusiness` en JSON-LD y etiquetas semánticas accesibles.
+- **Interacciones**:
+  - Menú hamburguesa responsive para móviles vía vanilla JavaScript.
+  - Formulario interactivo de cotizaciones y formulario de testimonios con envío asíncrono `fetch()` (POST JSON) y campo trampa anti-spam (*honeypot*).
+  - Carga dinámica de reseñas desde la API con estados de carga (`loading spinner`).
+  - Botón de WhatsApp flotante con mensaje precargado.
 
-### Variables de entorno (Application Settings en Azure, nunca en el repo)
+### 2. Backend Serverless (`api/`)
+- Utiliza el **modelo de programación v4 de Azure Functions** (`@azure/functions`), donde los endpoints se auto-registran mediante `app.http(...)`.
+- **Persistencia en Excel mediante Microsoft Graph**:
+  - En lugar de una base de datos SQL o NoSQL tradicional, los datos se almacenan en un libro de Excel en OneDrive/SharePoint (`Quotes` y `Reviews`) mediante la Graph Workbook API (`/workbook/tables/{name}/rows`).
+  - Las cotizaciones disparan un correo inmediato de notificación vía `/users/{MAIL_FROM}/sendMail`.
+- **Flujo de Moderación de Reseñas**:
+  - Las reseñas enviadas por usuarios quedan registradas con `Estatus = "pending"`.
+  - Para aprobar una reseña y hacerla visible en el sitio web, el administrador solo debe cambiar el valor de la columna `Estatus` a `approved` directamente en el archivo Excel de OneDrive.
 
-`TENANT_ID`, `CLIENT_ID`, `CLIENT_SECRET`, `EXCEL_DRIVE_USER`, `EXCEL_FILE_PATH`, `MAIL_FROM`, `MAIL_TO`.
+---
 
-Para desarrollo local, estas mismas variables van en `api/local.settings.json` (gitignored, nunca se commitea).
+## 🔐 Variables de Entorno
 
-## Deploy
+Las credenciales de autenticación **nunca se guardan en el repositorio** y están configuradas en los **Application Settings** de Azure Static Web Apps (y localmente en `api/local.settings.json`):
 
-CI/CD vía GitHub Actions ([.github/workflows/azure-static-web-apps.yml](.github/workflows/azure-static-web-apps.yml)): cada push a `main` despliega automáticamente el sitio + API a Azure Static Web Apps. El token de despliegue vive como secret de GitHub (`AZURE_STATIC_WEB_APPS_API_TOKEN`), nunca en el repo.
+| Variable | Descripción |
+| :--- | :--- |
+| `TENANT_ID` | Microsoft Entra ID (Tenant ID) de JMX INTERIORS LTD |
+| `CLIENT_ID` | Application (Client) ID del App Registration |
+| `CLIENT_SECRET` | Secreto de cliente del App Registration |
+| `EXCEL_DRIVE_USER` | Correo de la cuenta de OneDrive propietaria del archivo |
+| `EXCEL_FILE_PATH` | Ruta del libro Excel en OneDrive (ej. `Documents/JMX_Database.xlsx`) |
+| `MAIL_FROM` | Buzón remitente configurado en Microsoft 365 para enviar alertas |
+| `MAIL_TO` | Buzón receptor donde llegan las solicitudes de cotización |
 
-Deploy manual (fallback, si hace falta forzar un deploy sin pasar por Actions):
+---
 
+## 🚀 Ciclo de Despliegue y Publicación
+
+### Despliegue Automático (Recomendado)
+El repositorio cuenta con GitHub Actions configurado en [.github/workflows/azure-static-web-apps.yml](.github/workflows/azure-static-web-apps.yml):
+1. Se aplican los cambios en el código.
+2. Se realiza commit y push a la rama `main`:
+   ```bash
+   git add .
+   git commit -m "feat: descripción de los cambios"
+   git push origin main
+   ```
+3. GitHub Actions toma el commit, valida y despliega en producción en Azure Static Web Apps usando el secreto `AZURE_STATIC_WEB_APPS_API_TOKEN`.
+
+### Despliegue Manual (Fallback CLI)
+Si se necesita forzar un despliegue manual sin pasar por GitHub:
 ```bash
-# desde la carpeta padre del proyecto (swa deploy falla si se corre desde dentro del app_location)
-SWA_CLI_DEPLOYMENT_TOKEN=$(az staticwebapp secrets list --name <static-web-app-name> --resource-group <resource-group> --query "properties.apiKey" -o tsv) \
-  npx --yes @azure/static-web-apps-cli deploy "JMX WEB" --api-location "JMX WEB/api" --env production
+npx --yes @azure/static-web-apps-cli deploy "c:\Users\xcare\Documents\JMX INTERIORS\Antigravity" --api-location "api" --env production
 ```
 
-## Pendientes
+---
 
-- [ ] Rotar `CLIENT_SECRET` (el original quedó expuesto durante el setup en chat) y actualizarlo solo en Application Settings de Azure — nunca en el repo.
-- [ ] Probar un envío real del formulario de quote contra `https://www.jmxinteriors.ca` y confirmar que llega la fila al Excel + el correo.
-- [ ] Borrar filas de prueba en las tablas `Quotes`/`Reviews` del Excel antes de considerar el sitio en producción "limpia".
-- [ ] Decidir y conectar CI/CD (GitHub Actions) si se quiere deploy automático.
-- [ ] (Opcional, a futuro) Mover los datos de la galería de `index.html` a un array/JSON para no editar HTML a mano cada vez que se rotan fotos.
+## 🛠️ Desarrollo Local
 
-## Mejoras ya aplicadas
+1. **Frontend**:
+   Abrir `index.html` directamente en el navegador o iniciar un servidor local estático.
+2. **Backend**:
+   ```bash
+   cd api
+   npm install
+   npm start
+   ```
+   *Requiere Azure Functions Core Tools v4 y `api/local.settings.json` con las variables de entorno.*
 
-Menú mobile funcional, honeypot + rate-limit en `/api/quote` y `/api/review`, headers de seguridad (CSP, `X-Content-Type-Options`, `Referrer-Policy`), SEO básico (meta description, Open Graph, favicon, JSON-LD LocalBusiness), labels accesibles en los formularios y `aria-label` en los botones flotantes, imágenes de galería convertidas a `.webp` con `loading="lazy"`, mensaje precargado en el botón de WhatsApp, estado de carga en la sección de reviews.
+---
+
+## 📋 Registro de Mejoras Implementadas
+
+- [x] Maquetación completa y diseño responsive de alta conversión.
+- [x] Integración de API serverless con Microsoft Graph para cotizaciones y reseñas.
+- [x] Flujo de moderación directa desde Excel en OneDrive.
+- [x] Protección de formularios con honeypot invisible y limitador de peticiones por IP.
+- [x] Headers de seguridad HTTP (CSP, X-Content-Type-Options, Referrer-Policy).
+- [x] Optimización de activos: galería en WebP con carga diferida.
+- [x] Optimización SEO (Open Graph, favicon, robots.txt, sitemap.xml, Schema.org JSON-LD).
+- [x] Pipeline de CI/CD automatizado vía GitHub Actions hacia Azure SWA.
+- [x] Configuración de directrices para agentes inteligentes ([AGENTS.md](AGENTS.md)).
