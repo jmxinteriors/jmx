@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -124,7 +124,58 @@
             line-height: 1.05;
         }
         .hero-content h1 span { color: var(--gold-color); }
-        .hero-content p { font-size: 1.2rem; margin: 20px 0 35px; color: #eee; }
+        .hero-content p { font-size: 1.2rem; margin: 20px 0 20px; color: #eee; }
+        
+        .hero-trust {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--gold-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: var(--white);
+            font-size: 0.95rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+        }
+        .hero-trust i { color: var(--gold-color); margin-right: 8px; }
+
+        /* --- TRUST BANNER --- */
+        .trust-banner {
+            background: #050505;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .trust-banner p {
+            color: #777;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .trust-logo-track {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .trust-logo-item {
+            color: #888;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        .trust-logo-item:hover { color: var(--white); }
+        .trust-logo-item i { font-size: 1.5rem; color: var(--gold-color); }
 
         /* --- SERVICES --- */
         .services { padding: 80px 20px; background: var(--dark-secondary); }
@@ -134,10 +185,16 @@
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             max-width: 1200px;
             margin: auto;
+        }
+        @media (max-width: 992px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 540px) {
+            .services-grid { grid-template-columns: 1fr; }
         }
 
         .service-card {
@@ -154,14 +211,32 @@
         /* --- THE JMX DIFFERENCE (BEFORE & AFTER) --- */
         #difference { padding: 80px 20px; background: #0a0a0a; }
         .ba-container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
-        .ba-item { position: relative; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
-        .ba-item img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+        .ba-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #222;
+            background: #111;
+            aspect-ratio: 1 / 1;
+        }
+        .ba-item img {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .ba-item:hover img {
+            transform: scale(1.04);
+        }
         .ba-label {
             position: absolute;
             top: 15px; left: 15px;
@@ -171,6 +246,19 @@
             font-size: 0.8rem;
             color: white;
             border-radius: 4px;
+            z-index: 2;
+        }
+        @media (max-width: 1024px) {
+            .ba-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .ba-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
         }
 
         .btn-primary {
@@ -218,19 +306,49 @@
         .slider-container::-webkit-scrollbar-thumb { background: var(--gold-color); border-radius: 10px; }
 
         .slider-item {
-            flex: 0 0 400px;
+            flex: 0 0 320px;
             scroll-snap-align: center;
-            background: #1a1a1a;
+            background: #141414;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid #333;
             transition: 0.3s;
+            display: flex;
+            flex-direction: column;
         }
-        .slider-item:hover { transform: translateY(-10px); border-color: var(--gold-color); }
-        .slider-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
-        .slider-caption { padding: 20px; text-align: center; background: #111; border-top: 2px solid var(--gold-color); }
-        .slider-caption h4 { color: var(--white); font-size: 0.9rem; text-transform: uppercase; }
+        .slider-item:hover { transform: translateY(-8px); border-color: var(--gold-color); }
+        .slider-img-wrap {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #111;
+            overflow: hidden;
+            position: relative;
+        }
+        .slider-img-wrap img {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .slider-item:hover .slider-img-wrap img {
+            transform: scale(1.05);
+        }
+        .slider-caption {
+            padding: 16px 14px;
+            text-align: center;
+            background: #111;
+            border-top: 2px solid var(--gold-color);
+            margin-top: auto;
+        }
+        .slider-caption h4 { color: var(--white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .scroll-hint { text-align: center; color: var(--gold-color); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .slider-item { flex: 0 0 260px; }
+        }
 
         .protection { padding: 80px 20px; text-align: center; background: #0a0a0a; }
         .protection-grid {
@@ -399,8 +517,8 @@
                 </ul>
             </nav>
 
-            <a href="tel:+17808605239" class="btn-phone-link">
-                <i class="fas fa-phone"></i> (780) 860-5239
+            <a href="#contact" class="btn-phone-link">
+                <i class="fas fa-file-invoice-dollar"></i> Free Quote
             </a>
         </div>
     </header>
@@ -408,8 +526,21 @@
     <section class="hero">
         <div class="hero-content">
             <h1>EXPERT<span> DRYWALL</span><br>& Interior Finishing </h1>
-            <p>Quality Boarding, Taping, and Painting for Edmonton Homes & Commercial Spaces.</p>
+            <p style="max-width: 800px; margin: 20px auto; line-height: 1.5;">Complete interior transformations.<br>Specializing in drywall, ceiling systems, restorations, and premium finishing.</p>
+            <div class="hero-trust">
+                <i class="fas fa-shield-alt"></i> Fully Licensed & Insured
+            </div>
+            <br>
             <a href="#contact" class="btn-primary">Get Free Quote</a>
+        </div>
+    </section>
+
+    <section class="trust-banner">
+        <p>Trusted By Industry Leaders & Commercial Projects</p>
+        <div class="trust-logo-track">
+            <div class="trust-logo-item"><i class="fas fa-tools"></i> Home Depot Pro</div>
+            <div class="trust-logo-item"><i class="fas fa-hard-hat"></i> WCB Alberta</div>
+            <div class="trust-logo-item"><i class="fas fa-shield-alt"></i> $2M Liability</div>
         </div>
     </section>
 
@@ -419,12 +550,14 @@
             <div class="bar"></div>
         </div>
         <div class="services-grid">
-            <div class="service-card"><i class="fas fa-border-all"></i><h3>Drywall Boarding</h3><p>Precise installation for basements, renovations, and new builds.</p></div>
-            <div class="service-card"><i class="fas fa-tape"></i><h3>Mud & Tape</h3><p>Level 4 & 5 Expert taping and multi-coat mudding for perfectly seamless,paint-ready walls.</p></div>
-            <div class="service-card"><i class="fas fa-hammer"></i><h3>Basement Development</h3><p>Full interior build-outs for residential homes.</p></div>
-            <div class="service-card"><i class="fas fa-eraser"></i><h3>Texture Removal</h3><p>Professional popcorn removal. We scrape, sand, and skim-coat for a modern flat finish.</p></div>
-            <div class="service-card"><i class="fas fa-paint-roller"></i><h3>Interior Painting</h3><p>Premium interior painting services with sharp lines and uniform coverage.</p></div>
-            <div class="service-card"><i class="fas fa-spray-can"></i><h3>Ceiling Textures</h3><p>Professional spray-applied Knockdown Popcorn and Splatter textures for a uniform ceiling look.Professional spray-applied knockdown and splatter.</p></div>
+            <div class="service-card"><i class="fas fa-border-all"></i><h3>Drywall (Boarding)</h3><p>Precise installation for basements, renovations, and commercial spaces.</p></div>
+            <div class="service-card"><i class="fas fa-tape"></i><h3>Mud & Tape</h3><p>Expert taping and multi-coat mudding for seamless, paint-ready walls.</p></div>
+            <div class="service-card"><i class="fas fa-temperature-low"></i><h3>Insulation & Poly</h3><p>Professional insulation and vapor barrier installation for energy efficiency.</p></div>
+            <div class="service-card"><i class="fas fa-paint-roller"></i><h3>Painting</h3><p>Premium interior painting services with sharp lines and uniform coverage.</p></div>
+            <div class="service-card"><i class="fas fa-eraser"></i><h3>Texture Removal</h3><p>Professional popcorn ceiling removal for a modern flat finish.</p></div>
+            <div class="service-card"><i class="fas fa-fill-drip"></i><h3>Skim Coat</h3><p>Level 5 skimming for a perfectly smooth, flawless surface.</p></div>
+            <div class="service-card"><i class="fas fa-water"></i><h3>Water Damage Repair</h3><p>Fast and reliable repair for drywall damaged by leaks or flooding.</p></div>
+            <div class="service-card"><i class="fas fa-hammer"></i><h3>Basement Development</h3><p>Full interior framing and build-outs for residential homes.</p></div>
         </div>
     </section>
 
@@ -433,17 +566,88 @@
             <h2>The JMX Difference</h2>
             <div class="bar"></div>
         </div>
+        <p style="text-align:center; color:#aaa; margin-bottom:30px; font-size:0.9rem;">Real projects &mdash; before and after our work.</p>
         <div class="ba-container">
+            <!-- Pair 1: Basement Boarding -->
             <div class="ba-item">
                 <span class="ba-label" style="background: #d9534f;">Before</span>
-                <img src="images/imagen (1).webp" alt="Before Taping">
+                <img src="images/before-01.jpg" alt="Before - Basement Boarding" loading="lazy">
             </div>
             <div class="ba-item">
                 <span class="ba-label" style="background: #5cb85c;">After</span>
-                <img src="images/imagen (2).webp" alt="After Mudding">
+                <img src="images/after-01.jpg" alt="After - Basement Boarding" loading="lazy">
             </div>
-        </div>
-        <div style="text-align: center;">
+
+            <!-- Pair 2: Living Room Ceiling & Paint -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-02.jpg" alt="Before - Living Room Prep" loading="lazy">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-02.jpg" alt="After - Living Room Finished" loading="lazy">
+            </div>
+
+            <!-- Pair 3: Ceiling Plumbing Access to Popcorn Texture Match -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-03.jpg" alt="Before - Ceiling Hole Repair" loading="lazy" style="object-position: center 15%;">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-03.jpg" alt="After - Seamless Popcorn Texture Match" loading="lazy" style="object-position: center 20%;">
+            </div>
+
+            <!-- Pair 4: Kitchen Water Damage & Mold Repair -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-04.jpg" alt="Before - Kitchen Water Damage" loading="lazy" style="object-position: center 20%;">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-04.jpg" alt="After - Kitchen Ceiling Restored" loading="lazy" style="object-position: center 20%;">
+            </div>
+
+            <!-- Pair 5: Commercial Hallway Taping to Paint -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-05.webp" alt="Before - Commercial Hallway Taping" loading="lazy">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-05.webp" alt="After - Finished Paint" loading="lazy">
+            </div>
+
+            <!-- Pair 6: Interior Framing & Doorway Build-out -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-06.jpg" alt="Before - Doorway Wood Framing" loading="lazy">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-06.jpg" alt="After - Finished Drywalled Doorway" loading="lazy">
+            </div>
+
+            <!-- Pair 7: Flood Cut Remediation -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-07.jpg" alt="Before - Flood Cut Drywall Damage" loading="lazy">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-07.jpg" alt="After - Remediated & Taped Walls" loading="lazy">
+            </div>
+
+            <!-- Pair 8: Bathroom Vanity Soffit Repair -->
+            <div class="ba-item">
+                <span class="ba-label" style="background: #d9534f;">Before</span>
+                <img src="images/before-08.jpg" alt="Before - Bathroom Soffit Damage" loading="lazy" style="object-position: center 15%;">
+            </div>
+            <div class="ba-item">
+                <span class="ba-label" style="background: #5cb85c;">After</span>
+                <img src="images/after-08.jpg" alt="After - Smooth Soffit Reconstruction" loading="lazy" style="object-position: center 20%;">
+            </div>
+        </div><div style="text-align: center;">
             <a href="#gallery" class="btn-work">View All Projects</a>
         </div>
     </section>
@@ -555,11 +759,18 @@
                 <p>Edmonton, St. Albert, Sherwood Park, Spruce Grove & Leduc.</p>
             </div>
             <div class="footer-item">
+                <h4>Trusted & Certified</h4>
+                <p><i class="fas fa-shield-alt" style="color:var(--gold-color); margin-right:5px;"></i> $2M Liability Insurance</p>
+                <p><i class="fas fa-hard-hat" style="color:var(--gold-color); margin-right:5px;"></i> WCB Alberta Coverage</p>
+                <p><i class="fas fa-file-contract" style="color:var(--gold-color); margin-right:5px;"></i> City of Edmonton Licensed</p>
+                <p><i class="fas fa-tools" style="color:var(--gold-color); margin-right:5px;"></i> Home Depot Local Pro</p>
+                <p><i class="fas fa-city" style="color:var(--gold-color); margin-right:5px;"></i> Large Commercial Ready</p>
+            </div>
+            <div class="footer-item">
                 <h4>Follow Us</h4>
 		<p>JMX INTERIORS LTD <br> Quality you can trust.</p>
                 <div class="social-icons">
-                    <a href="https://instagram.com/jmxinteriors" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com/jmxinteriors" target="_blank" aria-label="Follow JMX Interiors on Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
@@ -577,26 +788,30 @@
 
     <script>
         const API_BASE = '/api';
-
         const GALLERY_ITEMS = [
-            { src: 'images/imagen (3).webp', alt: 'Work 1', caption: 'Commercial Hallway Taping' },
-            { src: 'images/imagen (4).webp', alt: 'Work 2', caption: 'Specialty Ceiling Detail & Cutouts' },
-            { src: 'images/imagen (5).webp', alt: 'Work 3', caption: 'Office Mudding & Finishing' },
-            { src: 'images/imagen (6).webp', alt: 'Work 6', caption: 'Primed Commercial Space' },
-            { src: 'images/imagen (7).webp', alt: 'Work 7', caption: 'Basement Development' },
-            { src: 'images/imagen (8).webp', alt: 'Work 8', caption: 'Smooth Basement Finish' },
-            { src: 'images/imagen (9).webp', alt: 'Work 9', caption: 'Kitchen Cabinet Protection' },
-            { src: 'images/imagen (10).webp', alt: 'Work 10', caption: 'Furniture & Dust Barriers' },
-            { src: 'images/imagen (11).webp', alt: 'Work 11', caption: 'Stairwell Drywall Phase' },
-            { src: 'images/imagen (12).webp', alt: 'Work 12', caption: 'Profesional Mudtape and ceiling paint Work' },
-            { src: 'images/imagen (13).webp', alt: 'Work 13', caption: 'Commercial Site Protection & Dust Control' },
+            { src: 'images/g-01.jpg',  alt: 'Architectural Arched & Barrel Ceiling', caption: 'Custom Arched Ceiling - Level 4 Finish' },
+            { src: 'images/g-02.jpg',  alt: 'Precision Skim Coating in Progress',   caption: 'Precision Skim Coating - Level 5 Smooth Finish' },
+            { src: 'images/g-03.jpg',  alt: 'Commercial Level 4 Drywall Taping',     caption: 'Commercial Level 4 Taping & Joint Finishing', pos: 'center 35%' },
+            { src: 'images/g-04.webp', alt: 'High Commercial Ceilings & Recessed Cuts', caption: 'High Ceilings & Recessed Architectural Details' },
+            { src: 'images/g-05.webp', alt: 'Multi-Pass Joint Compound Finishing',   caption: 'Multi-Pass Joint Compound & Corner Beads' },
+            { src: 'images/g-06.webp', alt: 'Commercial Partition Walls & Taping',    caption: 'Commercial Partition Walls & Joint Taping', pos: 'center 25%' },
+            { src: 'images/g-07.jpg',  alt: 'Custom Knockdown Ceiling Texture',      caption: 'Custom Knockdown Ceiling Texture Finish' },
+            { src: 'images/g-08.jpg',  alt: 'Vaulted Ceiling Level 5 Skim Coat',     caption: 'Vaulted Ceiling Skim Coat' },
+            { src: 'images/g-09.jpg',  alt: 'Sloped Ceiling Knockdown Texture',      caption: 'Sloped Ceiling Knockdown Texture Application' },
+            { src: 'images/g-10.jpg',  alt: 'Total Property & Furniture Protection', caption: 'Total Property, Furniture & Floor Protection' },
+            { src: 'images/g-11.webp', alt: 'Commercial Dust Barriers Containment',  caption: 'Commercial Dust Barriers & Site Containment', pos: 'center 22%' },
+            { src: 'images/g-12.jpg',  alt: 'Expert Mudding & Corner Bead Detailing', caption: 'Expert Mudding, Taping & Edge Bead Detailing', pos: 'center 25%' },
+            { src: 'images/g-13.jpg',  alt: 'Ceiling Texture Spraying',              caption: 'Ceiling Texture Spraying & Blending', pos: 'center 15%' },
+            { src: 'images/g-14.jpg',  alt: 'Large-Scale Property Protection',       caption: 'Large-Scale Protection', pos: 'center 38%' }
         ];
 
         function renderGallery() {
             const container = document.getElementById('gallery-slider');
             container.innerHTML = GALLERY_ITEMS.map((item) => `
                 <div class="slider-item">
-                    <img src="${item.src}" alt="${escapeHtml(item.alt)}" loading="lazy">
+                    <div class="slider-img-wrap">
+                        <img src="${item.src}" alt="${escapeHtml(item.alt)}" loading="lazy"${item.pos ? ` style="object-position: ${item.pos};"` : ''}>
+                    </div>
                     <div class="slider-caption"><h4>${escapeHtml(item.caption)}</h4></div>
                 </div>
             `).join('');
