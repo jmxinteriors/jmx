@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "canal-comentarios/**"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths-ignore:
+      - "canal-comentarios/**"
 
 jobs:
   build_and_deploy_job:

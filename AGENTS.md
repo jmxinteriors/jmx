@@ -4,11 +4,17 @@ This file provides context, architectural details, and operational guidance for 
 
 ---
 
+## Active Task: Optional image on review comments
+
+Si el usuario pide "ejecutar el plan de imágenes en comentarios" (o algo equivalente), lee [task/todo.md](task/todo.md) y síguelo paso a paso. Reglas clave: lenguaje sencillo, detenerse al terminar cada paso, esperar autorización explícita del usuario antes de continuar, no borrar nada, y no hacer commit ni publicar sin autorización en el paso 7. Si te atoras con una duda que no puedes resolver, documéntala en [canal-comentarios/](canal-comentarios/README.md) siguiendo su README. Importante: todo push a `main` publica el sitio en producción (ver `.github/workflows/azure-static-web-apps.yml`), excepto los que solo tocan `canal-comentarios/`.
+
+---
+
 ## Project Overview
 
 Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-based drywall, basement development, framing, and painting contractor), hosted and deployed on **Azure Static Web Apps (SWA)**.
 
-- **Primary References**: See [README.md](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/README.md) for production URLs, Azure resource names, deployment credentials, and operational status.
+- **Primary References**: See [README.md](README.md) for production URLs, Azure resource names, deployment credentials, and operational status.
 - **Frontend**: Self-contained static website (`index.html`) with zero build step.
 - **Backend**: Node.js Azure Functions v4 (`api/`) integrated with Microsoft Graph (OneDrive Excel workbook storage & Outlook email).
 
@@ -22,7 +28,7 @@ Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-bas
   - Direct file / static file server preview (e.g., `npx serve .` or opening `index.html` in a browser).
   - No build or compilation step required.
 - **Backend (API)**:
-  - Located in the [api/](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api) directory.
+  - Located in the [api/](api) directory.
   - Run locally:
     ```bash
     cd api
@@ -43,7 +49,7 @@ Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-bas
 
 ## Architecture & Codebase Map
 
-### 1. Frontend ([index.html](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/index.html))
+### 1. Frontend ([index.html](index.html))
 
 - Single self-contained HTML document.
 - Inline `<style>` block containing all CSS (no CSS preprocessor or framework).
@@ -61,30 +67,30 @@ Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-bas
   - Includes a hidden honeypot input (`#fax_number` / `faxNumber`) to trap spam bots.
   - Mobile navigation is toggled via vanilla JavaScript.
 
-### 2. Backend API ([api/](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api))
+### 2. Backend API ([api/](api))
 
 Uses the **Azure Functions v4 Node.js programming model** (`@azure/functions`), where functions are declared directly via `app.http(...)` in `src/functions/*.js` without legacy `function.json` manifests.
 
 #### Endpoints:
-- **`POST /api/quote`** ([api/src/functions/quote.js](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api/src/functions/quote.js)):
+- **`POST /api/quote`** ([api/src/functions/quote.js](api/src/functions/quote.js)):
   - Validates request payload (name, email, phone, service, message).
   - Enforces rate limiting and honeypot checks.
   - Appends a new entry to the `Quotes` table in the OneDrive Excel workbook.
   - Dispatches an email notification via Microsoft Graph `sendMail`.
-- **`POST /api/review`** ([api/src/functions/review.js](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api/src/functions/review.js)):
+- **`POST /api/review`** ([api/src/functions/review.js](api/src/functions/review.js)):
   - Validates customer review submission (author, rating, comment, project type).
   - Appends row to the `Reviews` Excel table with initial status `Estatus = "pending"`.
-- **`GET /api/reviews`** ([api/src/functions/reviews.js](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api/src/functions/reviews.js)):
+- **`GET /api/reviews`** ([api/src/functions/reviews.js](api/src/functions/reviews.js)):
   - Retrieves rows from the `Reviews` Excel table.
   - Filters in-memory to return only items where `Estatus = "approved"` (Graph Workbook API does not support server-side OData filtering on table rows).
 
 #### Core API Services:
-- **[api/src/graph.js](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api/src/graph.js)**:
+- **[api/src/graph.js](api/src/graph.js)**:
   - Microsoft Graph API client powered by MSAL (`@azure/msal-node`) client-credentials flow (`ConfidentialClientApplication`).
   - Caches access tokens in-memory per Function runtime instance.
   - Integrates with Excel Workbook API (`/workbook/tables/{name}/rows`) to treat the OneDrive `.xlsx` sheet as the primary data store.
   - Dispatches notifications via `/users/{MAIL_FROM}/sendMail`.
-- **[api/src/security.js](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api/src/security.js)**:
+- **[api/src/security.js](api/src/security.js)**:
   - In-memory per-instance IP rate limiter (`isRateLimited`).
   - Bot honeypot validator (`isHoneypotFilled`).
 
@@ -101,11 +107,11 @@ Configured in Azure Static Web App Application Settings or `api/local.settings.j
 #### Admin Workflow:
 - There is no custom admin dashboard. Reviews and quotes are managed directly by opening and editing the Excel workbook in OneDrive/SharePoint (approving reviews by toggling `Estatus` to `approved`).
 
-### 3. Utility Scripts ([api/scripts/](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/api/scripts))
+### 3. Utility Scripts ([api/scripts/](api/scripts))
 
 - **`create-excel-file.js`**: One-off bootstrap script. Microsoft Graph rejects direct upload of pre-structured `.xlsx` files generated by third-party libraries (`FileCorruptTryRepair`). This script uploads an empty template and provisions the `Quotes` and `Reviews` tables and schemas directly through Graph Workbook API calls.
 
-### 4. Routing & Configuration ([staticwebapp.config.json](file:///c:/Users/xcare/Documents/JMX%20INTERIORS/Antigravity/staticwebapp.config.json))
+### 4. Routing & Configuration ([staticwebapp.config.json](staticwebapp.config.json))
 
 - Configures route authorization (anonymous access to `/api/*`).
 - Defines SPA navigation fallback pointing to `/index.html`.

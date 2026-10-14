@@ -3,6 +3,10 @@
     {
       "route": "/api/*",
       "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/canal-comentarios/*",
+      "statusCode": 404
     }
   ],
   "navigationFallback": {
