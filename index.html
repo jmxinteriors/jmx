@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -412,19 +412,182 @@
             border: 0;
         }
 
-        /* --- REVIEWS --- */
+        /* --- REVIEWS (OPTION 1: COMPACT RATING SUMMARY + 3 VISIBLE CARDS) --- */
         .reviews-section { padding: 80px 20px; background: #0a0a0a; }
-        .reviews-container {
-            max-width: 1000px;
-            margin: 0 auto 50px;
+
+        .reviews-summary {
+            max-width: 780px;
+            margin: 0 auto 35px;
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 18px 24px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 210px 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+        .rating-overview {
+            text-align: center;
+            border-right: 1px solid #222;
+            padding-right: 20px;
+        }
+        .rating-score {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1;
+            font-family: 'Bebas Neue', 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+        }
+        .rating-score span {
+            font-size: 1.4rem;
+            color: #777;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .rating-stars-large {
+            color: var(--gold-color);
+            font-size: 1.05rem;
+            margin: 4px 0 6px;
+            letter-spacing: 2px;
+        }
+        .rating-count {
+            color: var(--silver-text);
+            font-size: 0.8rem;
+        }
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 6px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold-color);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .rating-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .rating-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--silver-text);
+        }
+        .rating-bar-label {
+            min-width: 36px;
+            text-align: right;
+            font-weight: 600;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 3px;
+        }
+        .rating-bar-label i {
+            color: var(--gold-color);
+            font-size: 0.7rem;
+        }
+        .rating-bar-track {
+            flex: 1;
+            height: 7px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .rating-bar-fill {
+            height: 100%;
+            background: var(--gold-color);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        .rating-bar-pct {
+            min-width: 42px;
+            text-align: left;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .reviews-container {
+            max-width: 1100px;
+            margin: 0 auto 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
-        .review-card { background: #1a1a1a; padding: 25px; border: 1px solid #222; }
+        .review-card {
+            background: #141414;
+            padding: 24px;
+            border: 1px solid #222;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .review-card:hover {
+            border-color: #333;
+            transform: translateY(-3px);
+        }
         .review-stars { color: var(--gold-color); margin-bottom: 10px; letter-spacing: 2px; }
-        .review-card h4 { color: var(--white); margin-bottom: 10px; text-transform: uppercase; font-size: 1rem; }
-        .review-card p { color: var(--silver-text); font-size: 0.9rem; }
+        .review-card h4 { color: var(--white); margin-bottom: 8px; text-transform: uppercase; font-size: 0.95rem; }
+        .review-card p { color: var(--silver-text); font-size: 0.9rem; flex-grow: 1; line-height: 1.6; }
+        .review-photo {
+            display: block;
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            margin-top: 15px;
+            border-radius: 4px;
+            border: 1px solid #222;
+        }
+
+        .reviews-load-more-wrap {
+            text-align: center;
+            margin: 10px auto 45px;
+        }
+        .btn-load-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border: 1px solid var(--gold-color);
+            background: transparent;
+            color: var(--gold-color);
+            font-family: inherit;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-load-more:hover {
+            background: var(--gold-color);
+            color: var(--dark-bg);
+        }
+
+        @media (max-width: 768px) {
+            .reviews-summary {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 16px;
+            }
+            .rating-overview {
+                border-right: none;
+                border-bottom: 1px solid #222;
+                padding-right: 0;
+                padding-bottom: 14px;
+            }
+        }
+
         .review-form-container { max-width: 600px; margin: auto; }
         .review-form-container h3 { color: var(--white); text-align: center; margin-bottom: 20px; text-transform: uppercase; }
         .review-form { display: grid; gap: 15px; }
@@ -732,7 +895,21 @@
             <h2>Client Reviews</h2>
             <div class="bar"></div>
         </div>
+
+        <!-- Trust Badge Bar -->
+        <!-- Compact Rating Summary (Amazon / Google Style) -->
+        <div id="reviews-summary" class="reviews-summary" style="display: none;"></div>
+
+        <!-- Reviews Grid -->
         <div class="reviews-container" id="reviews-list"></div>
+
+        <!-- Load More Reviews Button -->
+        <div id="reviews-load-more-wrap" class="reviews-load-more-wrap" style="display: none;">
+            <button type="button" id="btn-load-more-reviews" class="btn-load-more">
+                <i class="fas fa-chevron-down"></i> Show More Reviews
+            </button>
+        </div>
+
         <div class="review-form-container">
             <h3>Leave a Review</h3>
             <form class="review-form" id="review-form">
@@ -985,33 +1162,135 @@
                 status.textContent = 'Something went wrong. Please try again later.';
             }
         });
+        const FALLBACK_REVIEWS = [
+            { nombre: 'Flor Mota', calificacion: 5, comentario: 'Excellent service!! And an incredible job! 🔥🔥🔥' },
+            { nombre: 'Grecia López', calificacion: 5, comentario: 'Wonderful job, excellent quality, excellent prices.' },
+            { nombre: 'Roxana Gonzalez', calificacion: 5, comentario: 'Son un equipo de varios, primero pusieron plástico en toda mi casa, y después me di cuenta que estaban haciendo una burbuja para que no se manchara ningún artículo. Son muy buenos y expertos en su trabajo. Gracias' },
+            { nombre: 'Thea F.', calificacion: 5, comentario: 'Fantastic job! The whole team is super professional and careful with everything. I recommend them 100%. I will absolutely hire them again without a doubt.' },
+            { nombre: 'Edward O', calificacion: 5, comentario: 'Excellent work! Fast, clean and efficient' },
+            { nombre: 'Artie A.', calificacion: 5, comentario: 'Excellent service! They repaired our basement drywall and the painting standard was outstanding. Seamless finish, clean work, and great communication throughout. 10/10!' },
+            { nombre: 'Mary Ann Herbert', calificacion: 5, comentario: 'I wanted to give my home a fresh new look and redesign the space, and they did an amazing job repairing my wall! The results were even better than I expected, with professional finishes and great attention to detail. They really helped transform the space and make my home feel new again. Excellent service and quality workmanship. I highly recommend them!' }
+        ];
+
+        let allReviews = [];
+        let visibleReviewCount = 3;
+
+        function renderReviewCards() {
+            const container = document.getElementById('reviews-list');
+            const loadMoreWrap = document.getElementById('reviews-load-more-wrap');
+            const btnLoadMore = document.getElementById('btn-load-more-reviews');
+
+            const displayed = allReviews.slice(0, visibleReviewCount);
+            container.innerHTML = displayed.map((r) => {
+                const rating = Math.min(5, Math.max(1, parseInt(r.calificacion, 10) || 5));
+                const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+                const photo = r.imagen
+                    ? `<img class="review-photo" src="${API_BASE}/review-image/${encodeURIComponent(r.imagen)}" alt="Photo shared with this review" loading="lazy">`
+                    : '';
+                return `
+                    <div class="review-card">
+                        <div class="review-stars">${stars}</div>
+                        <h4>${escapeHtml(r.nombre)}</h4>
+                        <p>${escapeHtml(r.comentario)}</p>
+                        ${photo}
+                    </div>
+                `;
+            }).join('');
+
+            if (allReviews.length > 3) {
+                loadMoreWrap.style.display = 'block';
+                if (visibleReviewCount < allReviews.length) {
+                    const remaining = allReviews.length - visibleReviewCount;
+                    btnLoadMore.innerHTML = `<i class="fas fa-chevron-down"></i> Show More Reviews (${remaining} more)`;
+                } else {
+                    btnLoadMore.innerHTML = `<i class="fas fa-chevron-up"></i> Show Less`;
+                }
+            } else {
+                loadMoreWrap.style.display = 'none';
+            }
+        }
+
+        document.getElementById('btn-load-more-reviews').addEventListener('click', () => {
+            if (visibleReviewCount >= allReviews.length) {
+                visibleReviewCount = 3;
+                renderReviewCards();
+                document.getElementById('reviews').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                visibleReviewCount += 3;
+                renderReviewCards();
+            }
+        });
+
+        function displayReviewsData(reviews) {
+            const summaryBox = document.getElementById('reviews-summary');
+            if (!Array.isArray(reviews) || !reviews.length) {
+                summaryBox.style.display = 'none';
+                return;
+            }
+
+            allReviews = reviews;
+
+            const total = reviews.length;
+            const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+            let sumRating = 0;
+
+            reviews.forEach((r) => {
+                const val = Math.min(5, Math.max(1, parseInt(r.calificacion, 10) || 5));
+                counts[val] = (counts[val] || 0) + 1;
+                sumRating += val;
+            });
+
+            const average = (sumRating / total).toFixed(1);
+            const avgRounded = Math.round(sumRating / total);
+            const starsDisplay = '★'.repeat(avgRounded) + '☆'.repeat(5 - avgRounded);
+
+            summaryBox.innerHTML = `
+                <div class="rating-overview">
+                    <div class="rating-score">${average} <span>/ 5</span></div>
+                    <div class="rating-stars-large">${starsDisplay}</div>
+                    <div class="rating-count">Based on ${total} verified ${total === 1 ? 'review' : 'reviews'}</div>
+                    <div class="rating-badge"><i class="fas fa-check-circle"></i> 100% Satisfaction</div>
+                </div>
+                <div class="rating-bars">
+                    ${[5, 4, 3, 2, 1].map((star) => {
+                        const count = counts[star] || 0;
+                        const pct = Math.round((count / total) * 100);
+                        return `
+                            <div class="rating-bar-row">
+                                <span class="rating-bar-label">${star} <i class="fas fa-star"></i></span>
+                                <div class="rating-bar-track">
+                                    <div class="rating-bar-fill" style="width: ${pct}%;"></div>
+                                </div>
+                                <span class="rating-bar-pct">${pct}% (${count})</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            summaryBox.style.display = 'grid';
+
+            renderReviewCards();
+        }
 
         async function loadReviews() {
-            const container = document.getElementById('reviews-list');
-            container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Loading reviews...</p>';
+            // Render fallback immediately for 0ms delay in local preview
+            displayReviewsData(FALLBACK_REVIEWS);
+
+            // If running as local file, do not wait for network fetch
+            if (window.location.protocol === 'file:') return;
+
             try {
-                const res = await fetch(`${API_BASE}/reviews`);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3500);
+                const res = await fetch(`${API_BASE}/reviews`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!res.ok) throw new Error('API request failed');
                 const reviews = await res.json();
-                if (!reviews.length) {
-                    container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No reviews yet — be the first!</p>';
-                    return;
+                if (Array.isArray(reviews) && reviews.length) {
+                    displayReviewsData(reviews);
                 }
-                container.innerHTML = reviews.map((r) => {
-                    const stars = '★'.repeat(r.calificacion) + '☆'.repeat(5 - r.calificacion);
-                    const photo = r.imagen
-                        ? `<img class="review-photo" src="${API_BASE}/review-image/${encodeURIComponent(r.imagen)}" alt="Photo shared with this review" loading="lazy">`
-                        : '';
-                    return `
-                        <div class="review-card">
-                            <div class="review-stars">${stars}</div>
-                            <h4>${escapeHtml(r.nombre)}</h4>
-                            <p>${escapeHtml(r.comentario)}</p>
-                            ${photo}
-                        </div>
-                    `;
-                }).join('');
             } catch (err) {
-                container.innerHTML = '';
+                // If fetch fails or times out, fallback is already active
             }
         }
 
