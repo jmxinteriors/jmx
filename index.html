@@ -438,6 +438,21 @@
         }
         .review-form input:focus, .review-form select:focus, .review-form textarea:focus { border-color: var(--gold-color); outline: none; }
         .review-status { text-align: center; margin-top: 15px; font-size: 0.9rem; }
+        .review-image-label { color: var(--silver-text); font-size: 0.9rem; margin-bottom: -8px; }
+        .review-form input[type="file"] { color: var(--silver-text); font-size: 0.9rem; }
+        .review-image-preview { display: flex; align-items: center; gap: 15px; }
+        .review-image-preview[hidden] { display: none; }
+        .review-image-preview img { width: 100px; height: 100px; object-fit: cover; border: 1px solid #333; }
+        .review-image-remove {
+            background: none;
+            border: 1px solid #333;
+            color: var(--silver-text);
+            padding: 8px 14px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .review-image-remove:hover { border-color: var(--gold-color); color: var(--white); }
+        .review-photo { display: block; width: 100%; max-height: 240px; object-fit: cover; margin-top: 15px; border: 1px solid #222; }
 
         /* --- FOOTER --- */
         footer { background: #000; padding: 60px 20px 20px; border-top: 4px solid var(--gold-color); }
@@ -734,6 +749,12 @@
                 </select>
                 <label for="review-comment" class="sr-only">Share your experience</label>
                 <textarea id="review-comment" name="comment" rows="4" placeholder="Share your experience..." required></textarea>
+                <label for="review-image" class="review-image-label">Add a photo (optional)</label>
+                <input type="file" id="review-image" accept="image/jpeg,image/png,image/webp">
+                <div class="review-image-preview" id="review-image-preview" hidden>
+                    <img id="review-image-thumb" alt="Preview of the selected photo">
+                    <button type="button" class="review-image-remove" id="review-image-remove">Remove photo</button>
+                </div>
                 <label for="review-website" class="sr-only">Leave this field empty</label>
                 <input type="text" id="review-website" name="website" class="hp-field" tabindex="-1" autocomplete="off">
                 <button type="submit" class="contact-btn">Submit Review</button>
@@ -872,7 +893,74 @@
             }
         });
 
-        document.getElementById('review-form').addEventListener('submit', async (e) => {
+        const MAX_IMAGE_SIDE = 1280;
+        const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+        const reviewForm = document.getElementById('review-form');
+        const reviewImageInput = document.getElementById('review-image');
+        const reviewImagePreview = document.getElementById('review-image-preview');
+        const reviewImageThumb = document.getElementById('review-image-thumb');
+        let reviewImageBase64 = '';
+
+        function clearReviewImage() {
+            reviewImageBase64 = '';
+            reviewImageInput.value = '';
+            reviewImageThumb.removeAttribute('src');
+            reviewImagePreview.hidden = true;
+        }
+
+        async function resizeImageToJpeg(file) {
+            const sourceUrl = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+            const img = await new Promise((resolve, reject) => {
+                const el = new Image();
+                el.onload = () => resolve(el);
+                el.onerror = reject;
+                el.src = sourceUrl;
+            });
+            const scale = Math.min(1, MAX_IMAGE_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.naturalWidth * scale);
+            canvas.height = Math.round(img.naturalHeight * scale);
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            for (const quality of [0.8, 0.6]) {
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                const base64 = dataUrl.split(',')[1];
+                if (base64.length * 0.75 <= MAX_IMAGE_BYTES) return { dataUrl, base64 };
+            }
+            throw new Error('Image too large');
+        }
+
+        reviewImageInput.addEventListener('change', async () => {
+            const status = document.getElementById('review-status');
+            status.textContent = '';
+            const file = reviewImageInput.files[0];
+            if (!file) {
+                clearReviewImage();
+                return;
+            }
+            try {
+                const { dataUrl, base64 } = await resizeImageToJpeg(file);
+                reviewImageBase64 = base64;
+                reviewImageThumb.src = dataUrl;
+                reviewImagePreview.hidden = false;
+            } catch (err) {
+                clearReviewImage();
+                status.style.color = '#d9534f';
+                status.textContent = 'We could not use that photo. Please try a JPG, PNG or WebP image, or send your review without it.';
+            }
+        });
+
+        document.getElementById('review-image-remove').addEventListener('click', clearReviewImage);
+        reviewForm.addEventListener('reset', clearReviewImage);
+
+        reviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
             const status = document.getElementById('review-status');
@@ -885,6 +973,7 @@
                         rating: form.rating.value,
                         comment: form.comment.value,
                         website: form.website.value,
+                        ...(reviewImageBase64 ? { image: reviewImageBase64 } : {}),
                     }),
                 });
                 if (!res.ok) throw new Error('Request failed');
@@ -909,11 +998,15 @@
                 }
                 container.innerHTML = reviews.map((r) => {
                     const stars = '★'.repeat(r.calificacion) + '☆'.repeat(5 - r.calificacion);
+                    const photo = r.imagen
+                        ? `<img class="review-photo" src="${API_BASE}/review-image/${encodeURIComponent(r.imagen)}" alt="Photo shared with this review" loading="lazy">`
+                        : '';
                     return `
                         <div class="review-card">
                             <div class="review-stars">${stars}</div>
                             <h4>${escapeHtml(r.nombre)}</h4>
                             <p>${escapeHtml(r.comentario)}</p>
+                            ${photo}
                         </div>
                     `;
                 }).join('');

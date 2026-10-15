@@ -10,11 +10,12 @@ app.http('reviews', {
       const rows = await getTableRows('Reviews');
       const approved = rows
         .filter((row) => String(row[4]).toLowerCase() === 'approved')
-        .map(([fecha, nombre, calificacion, comentario]) => ({
-          fecha,
-          nombre,
-          calificacion,
-          comentario,
+        .map((row) => ({
+          fecha: row[0],
+          nombre: row[1],
+          calificacion: row[2],
+          comentario: row[3],
+          imagen: row[5] || null,
         }));
       return { status: 200, jsonBody: approved };
     } catch (err) {

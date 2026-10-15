@@ -1,6 +1,6 @@
 # Imagen opcional en comentarios (reseñas)
 
-Estado: LISTO PARA EJECUTAR — nada del plan se ha ejecutado todavía.
+Estado: EN EJECUCIÓN por Angel junto con Claude (no por otro agente ni persona). Pasos 0 al 6 completados; falta el paso 7 (guardar y publicar). No volver a ejecutar este plan.
 
 ---
 
@@ -115,44 +115,44 @@ El agente actualiza README.md, CLAUDE.md y AGENTS.md únicamente donde se mencio
 ## Tareas (marcar al completar, por paso)
 
 ### Paso 0 — Preparación
-- [ ] 0.1. Verificar `api/local.settings.json` con las 7 variables, Azure Functions Core Tools y Node, `git status` limpio y `git pull`.
+- [x] 0.1. Verificar `api/local.settings.json` con las 7 variables, Azure Functions Core Tools y Node, `git status` limpio y `git pull`.
 
 ### Paso 1 — Graph client ([api/src/graph.js](../api/src/graph.js))
-- [ ] 1.1. `uploadFile(relativePath, buffer, contentType)`: `PUT /users/{upn}/drive/root:{dir}/{relativePath}:/content`. `graphFetch` fuerza `Content-Type: application/json`; pasar el header del archivo (el override ya está permitido). La respuesta de Graph es JSON, así que sirve.
-- [ ] 1.2. `getFile(relativePath)`: `GET .../content` devolviendo `Buffer` (usar `fetch` directo con redirect; la respuesta no es JSON, no usar `graphFetch`).
-- [ ] 1.3. Helper interno `comentariosDir()` = directorio de `EXCEL_FILE_PATH` + `/comentarios`.
-- [ ] 1.4. Prueba con script temporal (en el scratchpad o carpeta temporal, no en el repo): subir una foto de `images/` y leerla de vuelta. Pedir autorización antes de correrlo.
+- [x] 1.1. `uploadFile(relativePath, buffer, contentType)`: `PUT /users/{upn}/drive/root:{dir}/{relativePath}:/content`. `graphFetch` fuerza `Content-Type: application/json`; pasar el header del archivo (el override ya está permitido). La respuesta de Graph es JSON, así que sirve.
+- [x] 1.2. `getFile(relativePath)`: `GET .../content` devolviendo `Buffer` (usar `fetch` directo con redirect; la respuesta no es JSON, no usar `graphFetch`).
+- [x] 1.3. Helper interno `comentariosDir()` = directorio de `EXCEL_FILE_PATH` + `/comentarios`.
+- [x] 1.4. Prueba con script temporal (en el scratchpad o carpeta temporal, no en el repo): subir una foto de `images/` y leerla de vuelta. Pedir autorización antes de correrlo.
 
 ### Paso 2 — Excel
-- [ ] 2.1. Agregar columna `Image` a la tabla `Reviews` (`POST /tables/Reviews/columns/add` o manual). Confirmar con la persona antes de tocar el archivo de producción.
-- [ ] 2.2. Actualizar [api/scripts/create-excel-file.js](../api/scripts/create-excel-file.js): columnas `['Date', 'Name', 'Rating', 'Comment', 'Status', 'Image']`.
+- [x] 2.1. Agregar columna `Image` a la tabla `Reviews` (`POST /tables/Reviews/columns/add` o manual). Confirmar con la persona antes de tocar el archivo de producción.
+- [x] 2.2. Actualizar [api/scripts/create-excel-file.js](../api/scripts/create-excel-file.js): columnas `['Date', 'Name', 'Rating', 'Comment', 'Status', 'Image']`.
 
 ### Paso 3 — `POST /api/review` ([review.js](../api/src/functions/review.js))
-- [ ] 3.1. Leer `image` (base64 sin prefijo `data:`) del body; opcional.
-- [ ] 3.2. Si viene: decodificar, validar tamaño <= 2 MB y magic bytes (JPEG `FF D8 FF`, PNG `89 50 4E 47`, WebP `RIFF....WEBP`). Si es inválida, 400 `Invalid image`.
-- [ ] 3.3. Subir a OneDrive (`comentarios/<uuid>.<ext>`); guardar el nombre en la columna F (cadena vacía si no hay imagen).
-- [ ] 3.4. Orden: subir imagen primero, luego `addTableRow`. Si la fila falla, el archivo queda huérfano (aceptable).
-- [ ] 3.5. El correo de aviso no cambia.
-- [ ] 3.6. Pruebas con `curl` contra `func start` local: sin imagen; JPEG, PNG y WebP válidos; >2 MB; texto disfrazado de `.jpg`; base64 inválido. Nombres de prueba `PRUEBA`.
+- [x] 3.1. Leer `image` (base64 sin prefijo `data:`) del body; opcional.
+- [x] 3.2. Si viene: decodificar, validar tamaño <= 2 MB y magic bytes (JPEG `FF D8 FF`, PNG `89 50 4E 47`, WebP `RIFF....WEBP`). Si es inválida, 400 `Invalid image`.
+- [x] 3.3. Subir a OneDrive (`comentarios/<uuid>.<ext>`); guardar el nombre en la columna F (cadena vacía si no hay imagen).
+- [x] 3.4. Orden: subir imagen primero, luego `addTableRow`. Si la fila falla, el archivo queda huérfano (aceptable).
+- [x] 3.5. El correo de aviso no cambia.
+- [x] 3.6. Pruebas con `curl` contra `func start` local: sin imagen; JPEG, PNG y WebP válidos; >2 MB; texto disfrazado de `.jpg`; base64 inválido. Nombres de prueba `PRUEBA`.
 
 ### Paso 4 — Lectura y proxy
-- [ ] 4.1. [reviews.js](../api/src/functions/reviews.js): incluir `imagen: row[5] || null`.
-- [ ] 4.2. Nuevo `api/src/functions/reviewImage.js`: `app.http`, `route: 'review-image/{name}'`, anónimo, GET.
-- [ ] 4.3. Validar `name` con regex; leer filas de `Reviews`; verificar coincidencia en columna F y `Status=approved`; si no, 404.
-- [ ] 4.4. `getFile` y responder con `Content-Type` según extensión y `Cache-Control`.
-- [ ] 4.5. Pruebas con `curl`: `pending` -> 404; `approved` -> 200 con imagen; `name` con `../` o formato inválido -> 404; filas viejas (5 columnas) siguen funcionando.
+- [x] 4.1. [reviews.js](../api/src/functions/reviews.js): incluir `imagen: row[5] || null`.
+- [x] 4.2. Nuevo `api/src/functions/reviewImage.js`: `app.http`, `route: 'review-image/{name}'`, anónimo, GET.
+- [x] 4.3. Validar `name` con regex; leer filas de `Reviews`; verificar coincidencia en columna F y `Status=approved`; si no, 404.
+- [x] 4.4. `getFile` y responder con `Content-Type` según extensión y `Cache-Control`.
+- [x] 4.5. Pruebas con `curl`: `pending` -> 404; `approved` -> 200 con imagen; `name` con `../` o formato inválido -> 404; filas viejas (5 columnas) siguen funcionando.
 
 ### Paso 5 — Frontend ([index.html](../index.html)) — sin validación visual
-- [ ] 5.1. Markup: `<input type="file" id="review-image" accept="image/jpeg,image/png,image/webp">` con label "Add a photo (optional)", vista previa y botón para quitarla. Estilos acordes a `.review-form input` y paleta existente (dorado/oscuro).
-- [ ] 5.2. JS: al elegir archivo, cargar en `<img>`, reducir con canvas (lado largo <= 1280 px), exportar JPEG calidad ~0.8 y guardar base64. Si falla la decodificación (p. ej. HEIC en Chrome), mostrar mensaje claro y dejar enviar sin imagen.
-- [ ] 5.3. Si tras reducir pesa > 2 MB, bajar calidad una vez; si sigue grande, mostrar error.
-- [ ] 5.4. Enviar `image` en el JSON solo si hay imagen; limpiar vista previa en `form.reset()` y tras éxito.
-- [ ] 5.5. `loadReviews()`: si `r.imagen`, renderizar `<img src="/api/review-image/${encodeURIComponent(r.imagen)}" loading="lazy" alt="Photo from ${escapeHtml(r.nombre)}">` dentro de la tarjeta. Estilo `.review-card img` (ancho 100%, `object-fit: cover`, altura limitada).
-- [ ] 5.6. Revisar `API_BASE` para que apunte correcto en producción.
-- [ ] 5.7. Autorrevisión del código (sintaxis del script, que `escapeHtml` se use en todo dato mostrado, que el payload coincida con lo que espera `review.js`). Reportar a la persona solo "completado".
+- [x] 5.1. Markup: `<input type="file" id="review-image" accept="image/jpeg,image/png,image/webp">` con label "Add a photo (optional)", vista previa y botón para quitarla. Estilos acordes a `.review-form input` y paleta existente (dorado/oscuro).
+- [x] 5.2. JS: al elegir archivo, cargar en `<img>`, reducir con canvas (lado largo <= 1280 px), exportar JPEG calidad ~0.8 y guardar base64. Si falla la decodificación (p. ej. HEIC en Chrome), mostrar mensaje claro y dejar enviar sin imagen.
+- [x] 5.3. Si tras reducir pesa > 2 MB, bajar calidad una vez; si sigue grande, mostrar error.
+- [x] 5.4. Enviar `image` en el JSON solo si hay imagen; limpiar vista previa en `form.reset()` y tras éxito.
+- [x] 5.5. `loadReviews()`: si `r.imagen`, renderizar `<img src="/api/review-image/${encodeURIComponent(r.imagen)}" loading="lazy" alt="Photo from ${escapeHtml(r.nombre)}">` dentro de la tarjeta. Estilo `.review-card img` (ancho 100%, `object-fit: cover`, altura limitada).
+- [x] 5.6. Revisar `API_BASE` para que apunte correcto en producción.
+- [x] 5.7. Autorrevisión del código (sintaxis del script, que `escapeHtml` se use en todo dato mostrado, que el payload coincida con lo que espera `review.js`). Reportar a la persona solo "completado".
 
 ### Paso 6 — Documentación
-- [ ] 6.1. Actualizar README.md, CLAUDE.md y AGENTS.md solo donde mencionan columnas de `Reviews`, endpoints y el flujo de aprobación.
+- [x] 6.1. Actualizar README.md, CLAUDE.md y AGENTS.md solo donde mencionan columnas de `Reviews`, endpoints y el flujo de aprobación.
 
 ### Paso 7 — Cierre
 - [ ] 7.1. Resumen final y pedir autorización para commit (identidad de AGENTS.md).

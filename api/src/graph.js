@@ -1,5 +1,6 @@
 const { ConfidentialClientApplication } = require('@azure/msal-node');
 const fetch = require('node-fetch');
+const path = require('path');
 
 let cachedToken = null;
 let cachedTokenExpiry = 0;
@@ -61,6 +62,34 @@ async function getTableRows(tableName) {
   return data.value.map((row) => row.values[0]);
 }
 
+function comentariosFileUrl(fileName) {
+  const upn = process.env.EXCEL_DRIVE_USER;
+  const excelDir = path.posix.dirname(process.env.EXCEL_FILE_PATH);
+  const baseDir = excelDir === '/' ? '' : excelDir;
+  return `https://graph.microsoft.com/v1.0/users/${encodeURIComponent(upn)}/drive/root:${baseDir}/comentarios/${encodeURIComponent(fileName)}:/content`;
+}
+
+async function uploadComentarioFile(fileName, buffer, contentType) {
+  const token = await getGraphToken();
+  return graphFetch(comentariosFileUrl(fileName), token, {
+    method: 'PUT',
+    headers: { 'Content-Type': contentType },
+    body: buffer,
+  });
+}
+
+async function getComentarioFile(fileName) {
+  const token = await getGraphToken();
+  const res = await fetch(comentariosFileUrl(fileName), {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    throw new Error(`Graph request failed (${res.status}): ${await res.text()}`);
+  }
+  return res.buffer();
+}
+
 async function sendMail({ subject, body, to }) {
   const token = await getGraphToken();
   const from = process.env.MAIL_FROM;
@@ -77,4 +106,4 @@ async function sendMail({ subject, body, to }) {
   });
 }
 
-module.exports = { addTableRow, getTableRows, sendMail };
+module.exports = { addTableRow, getTableRows, uploadComentarioFile, getComentarioFile, sendMail };

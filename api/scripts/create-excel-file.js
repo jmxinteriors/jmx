@@ -108,7 +108,7 @@ async function main() {
   await uploadBlankWorkbook(token);
 
   await createSheetWithTable(token, 'Quotes', ['Date', 'Name', 'Phone', 'Email', 'Message']);
-  await createSheetWithTable(token, 'Reviews', ['Date', 'Name', 'Rating', 'Comment', 'Status']);
+  await createSheetWithTable(token, 'Reviews', ['Date', 'Name', 'Rating', 'Comment', 'Status', 'Image']);
 
   console.log('Eliminando hoja por defecto (Sheet1)...');
   await wb(token, 'DELETE', '/worksheets/Sheet1');

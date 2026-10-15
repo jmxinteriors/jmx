@@ -4,12 +4,6 @@ This file provides context, architectural details, and operational guidance for 
 
 ---
 
-## Active Task: Optional image on review comments
-
-Si el usuario pide "ejecutar el plan de imágenes en comentarios" (o algo equivalente), lee [task/todo.md](task/todo.md) y síguelo paso a paso. Reglas clave: lenguaje sencillo, detenerse al terminar cada paso, esperar autorización explícita del usuario antes de continuar, no borrar nada, y no hacer commit ni publicar sin autorización en el paso 7. Si te atoras con una duda que no puedes resolver, documéntala en [canal-comentarios/](canal-comentarios/README.md) siguiendo su README. Importante: todo push a `main` publica el sitio en producción (ver `.github/workflows/azure-static-web-apps.yml`), excepto los que solo tocan `canal-comentarios/`.
-
----
-
 ## Project Overview
 
 Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-based drywall, basement development, framing, and painting contractor), hosted and deployed on **Azure Static Web Apps (SWA)**.
@@ -42,7 +36,7 @@ Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-bas
 
 ### Deployment
 
-- Deployment is performed manually via the Azure Static Web Apps CLI (`swa deploy`) or via GitHub Actions deployment tokens when configured.
+- Every push to `main` deploys to production through GitHub Actions (`.github/workflows/azure-static-web-apps.yml`); pushes that only touch `canal-comentarios/` are ignored by the workflow. A manual deploy via the Azure Static Web Apps CLI (`swa deploy`) is also possible.
 - **Important**: When running `swa deploy`, do not run the command from inside the artifact/app directory directly, or it will throw an error: *"Current directory cannot be identical to or contained within artifact folders"*. Run it from the parent workspace root.
 
 ---
@@ -78,17 +72,21 @@ Uses the **Azure Functions v4 Node.js programming model** (`@azure/functions`), 
   - Appends a new entry to the `Quotes` table in the OneDrive Excel workbook.
   - Dispatches an email notification via Microsoft Graph `sendMail`.
 - **`POST /api/review`** ([api/src/functions/review.js](api/src/functions/review.js)):
-  - Validates customer review submission (author, rating, comment, project type).
-  - Appends row to the `Reviews` Excel table with initial status `Estatus = "pending"`.
+  - Validates customer review submission (author, rating, comment) plus an optional `image` (base64, max 2 MB, magic-byte checked as JPEG/PNG/WebP).
+  - Uploads the image to the `comentarios/` folder next to the Excel file as `<uuid>.<ext>`.
+  - Appends row to the `Reviews` Excel table (columns `Date, Name, Rating, Comment, Status, Image`) with initial `Status = "pending"`; `Image` holds the filename or is empty.
 - **`GET /api/reviews`** ([api/src/functions/reviews.js](api/src/functions/reviews.js)):
   - Retrieves rows from the `Reviews` Excel table.
-  - Filters in-memory to return only items where `Estatus = "approved"` (Graph Workbook API does not support server-side OData filtering on table rows).
+  - Filters in-memory to return only items where `Status = "approved"` (Graph Workbook API does not support server-side OData filtering on table rows). Each item includes `imagen` (filename or `null`).
+- **`GET /api/review-image/{name}`** ([api/src/functions/reviewImage.js](api/src/functions/reviewImage.js)):
+  - Serves a review photo from OneDrive only if `name` matches the UUID filename pattern and its row is `approved`; otherwise 404. Photos are never public on their own.
 
 #### Core API Services:
 - **[api/src/graph.js](api/src/graph.js)**:
   - Microsoft Graph API client powered by MSAL (`@azure/msal-node`) client-credentials flow (`ConfidentialClientApplication`).
   - Caches access tokens in-memory per Function runtime instance.
   - Integrates with Excel Workbook API (`/workbook/tables/{name}/rows`) to treat the OneDrive `.xlsx` sheet as the primary data store.
+  - Reads and writes review photos in the `comentarios/` OneDrive folder next to the workbook (`uploadComentarioFile`, `getComentarioFile`).
   - Dispatches notifications via `/users/{MAIL_FROM}/sendMail`.
 - **[api/src/security.js](api/src/security.js)**:
   - In-memory per-instance IP rate limiter (`isRateLimited`).
@@ -105,7 +103,7 @@ Configured in Azure Static Web App Application Settings or `api/local.settings.j
 - `MAIL_TO`: Destination mailbox address for quote notifications
 
 #### Admin Workflow:
-- There is no custom admin dashboard. Reviews and quotes are managed directly by opening and editing the Excel workbook in OneDrive/SharePoint (approving reviews by toggling `Estatus` to `approved`).
+- There is no custom admin dashboard. Reviews and quotes are managed directly by opening and editing the Excel workbook in OneDrive/SharePoint (approving reviews by toggling `Status` to `approved`; to preview a review's photo, open the file named in its `Image` column inside `comentarios/`).
 
 ### 3. Utility Scripts ([api/scripts/](api/scripts))
 

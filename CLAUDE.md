@@ -10,7 +10,7 @@ Marketing website + serverless backend for JMX Interiors Ltd (Edmonton drywall, 
 
 - **Frontend**: `index.html` is a single self-contained static page (no build step). Open directly in a browser or serve with any static file server to preview.
 - **API**: Node.js Azure Functions in `api/`. To run locally: `cd api && npm install && npm start` (runs `func start`, requires the Azure Functions Core Tools). Needs `api/local.settings.json` populated with the Graph credentials (gitignored, never commit it — ask for current values rather than assuming defaults).
-- **Deploy**: manual via SWA CLI, not yet wired to GitHub Actions — see the Deploy section in README.md for the exact command. Note: `swa deploy` fails with "Current directory cannot be identical to or contained within artifact folders" if run from inside the app_location itself; run it from the parent directory instead.
+- **Deploy**: every push to `main` deploys to production through GitHub Actions (`.github/workflows/azure-static-web-apps.yml`; pushes that only touch `canal-comentarios/` are ignored). A manual SWA CLI deploy is also possible — see the Deploy section in README.md for the exact command. Note: `swa deploy` fails with "Current directory cannot be identical to or contained within artifact folders" if run from inside the app_location itself; run it from the parent directory instead.
 - No lint/test tooling is configured.
 
 ## Architecture
@@ -24,16 +24,17 @@ Both the quote form and the review form POST JSON to the API (`fetch`, not nativ
 Azure Functions v4 (`@azure/functions` programming model — each function self-registers via `app.http(...)` in `api/src/functions/*.js`, no `function.json` files):
 
 - `POST /api/quote` ([api/src/functions/quote.js](api/src/functions/quote.js)) — validates fields, checks honeypot/rate-limit, appends a row to the `Quotes` Excel table, sends a notification email.
-- `POST /api/review` — same pattern, appends to the `Reviews` table with `Estatus=pending`.
-- `GET /api/reviews` — reads the `Reviews` table and returns only rows where `Estatus=approved` (filtered in-memory; Graph doesn't support filtering table rows server-side).
+- `POST /api/review` — same pattern, appends to the `Reviews` table with `Status=pending`. Accepts an optional `image` (base64, max 2 MB, magic-byte checked as JPEG/PNG/WebP), uploads it to the `comentarios/` folder next to the Excel file as `<uuid>.<ext>`, and stores that filename in the `Image` column (the table columns are `Date, Name, Rating, Comment, Status, Image`).
+- `GET /api/reviews` — reads the `Reviews` table and returns only rows where `Status=approved` (filtered in-memory; Graph doesn't support filtering table rows server-side), including `imagen` (filename or `null`).
+- `GET /api/review-image/{name}` ([api/src/functions/reviewImage.js](api/src/functions/reviewImage.js)) — streams a review photo from OneDrive only if `name` matches the UUID pattern and its row is `approved`; otherwise 404. Photos are never public on their own.
 
-All three share:
-- [api/src/graph.js](api/src/graph.js) — thin Microsoft Graph client. Auth is MSAL client-credentials flow (`ConfidentialClientApplication`, app-only permissions, token cached in-memory per Function instance). `addTableRow`/`getTableRows` hit the Excel **workbook API** (`/workbook/tables/{name}/rows`) against a fixed OneDrive file (`EXCEL_DRIVE_USER` + `EXCEL_FILE_PATH` env vars) — not a database. `sendMail` uses the Graph `sendMail` endpoint from `MAIL_FROM`.
+The shared pieces:
+- [api/src/graph.js](api/src/graph.js) — thin Microsoft Graph client. Auth is MSAL client-credentials flow (`ConfidentialClientApplication`, app-only permissions, token cached in-memory per Function instance). `addTableRow`/`getTableRows` hit the Excel **workbook API** (`/workbook/tables/{name}/rows`) against a fixed OneDrive file (`EXCEL_DRIVE_USER` + `EXCEL_FILE_PATH` env vars) — not a database. `uploadComentarioFile`/`getComentarioFile` read and write review photos in the `comentarios/` folder beside that file. `sendMail` uses the Graph `sendMail` endpoint from `MAIL_FROM`.
 - [api/src/security.js](api/src/security.js) — in-memory per-instance IP rate limiting (`isRateLimited`) and honeypot field check (`isHoneypotFilled`). Being in-memory, this resets on cold start and isn't shared across scaled-out instances — good enough for this traffic volume, not a hard guarantee.
 
 Required env vars (Application Settings in Azure, `local.settings.json` locally, never in the repo): `TENANT_ID`, `CLIENT_ID`, `CLIENT_SECRET`, `EXCEL_DRIVE_USER`, `EXCEL_FILE_PATH`, `MAIL_FROM`, `MAIL_TO`.
 
-There is no admin UI: reviews are approved by manually editing the `Estatus` column in the Excel file directly.
+There is no admin UI: reviews are approved by manually editing the `Status` column in the Excel file directly. To check a review's photo before approving, open the file named in its `Image` column inside `comentarios/`.
 
 ### `api/scripts/create-excel-file.js`
 One-off script used to bootstrap the Excel workbook: Graph rejects a pre-built `.xlsx` uploaded via `exceljs` (`FileCorruptTryRepair`), so this script uploads a blank workbook and then creates the `Quotes`/`Reviews` sheets and tables through the Graph Workbook API itself. Only needed again if the Excel file has to be recreated from scratch.

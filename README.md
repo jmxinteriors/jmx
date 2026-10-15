@@ -34,9 +34,10 @@ Alojado y desplegado de forma continua en **Azure Static Web Apps (SWA)** con ba
     ├── src/
     │   ├── functions/
     │   │   ├── quote.js       # POST /api/quote   -> Valida, guarda cotización en Excel OneDrive y envía correo
-    │   │   ├── review.js      # POST /api/review  -> Valida y guarda reseña de cliente en Excel (Estatus=pending)
-    │   │   └── reviews.js     # GET  /api/reviews -> Retorna las reseñas aprobadas (Estatus=approved)
-    │   ├── graph.js           # Cliente Microsoft Graph API (MSAL client-credentials, Excel Workbook & Mail)
+    │   │   ├── review.js      # POST /api/review  -> Valida y guarda reseña de cliente en Excel (Status=pending), con foto opcional
+    │   │   ├── reviews.js     # GET  /api/reviews -> Retorna las reseñas aprobadas (Status=approved), incluye el nombre de la foto si la hay
+    │   │   └── reviewImage.js # GET  /api/review-image/{name} -> Entrega la foto de una reseña solo si está aprobada
+    │   ├── graph.js           # Cliente Microsoft Graph API (MSAL client-credentials, Excel Workbook, archivos de OneDrive & Mail)
     │   └── security.js        # Validación anti-bots (honeypot) y limitador de tasa (rate-limit por IP)
     └── scripts/
         └── create-excel-file.js # Script inicial de bootstrapping para aprovisionar las tablas en OneDrive
@@ -61,8 +62,13 @@ Alojado y desplegado de forma continua en **Azure Static Web Apps (SWA)** con ba
   - En lugar de una base de datos SQL o NoSQL tradicional, los datos se almacenan en un libro de Excel en OneDrive/SharePoint (`Quotes` y `Reviews`) mediante la Graph Workbook API (`/workbook/tables/{name}/rows`).
   - Las cotizaciones disparan un correo inmediato de notificación vía `/users/{MAIL_FROM}/sendMail`.
 - **Flujo de Moderación de Reseñas**:
-  - Las reseñas enviadas por usuarios quedan registradas con `Estatus = "pending"`.
-  - Para aprobar una reseña y hacerla visible en el sitio web, el administrador solo debe cambiar el valor de la columna `Estatus` a `approved` directamente en el archivo Excel de OneDrive.
+  - Las reseñas enviadas por usuarios quedan registradas con `Status = "pending"`.
+  - Para aprobar una reseña y hacerla visible en el sitio web, el administrador solo debe cambiar el valor de la columna `Status` a `approved` directamente en el archivo Excel de OneDrive.
+- **Foto opcional en reseñas**:
+  - La tabla `Reviews` tiene las columnas `Date, Name, Rating, Comment, Status, Image`. `Image` guarda el nombre del archivo de la foto (vacía si no hay).
+  - El navegador reduce la foto (máx. 1280 px, JPEG) y la envía en base64 dentro del JSON de `POST /api/review`. El servidor valida que pese máx. 2 MB y que sea realmente JPEG, PNG o WebP, y la guarda en OneDrive en la carpeta `comentarios/`, junto al Excel, con nombre UUID (`<uuid>.<ext>`).
+  - La foto no es pública por sí sola: se sirve únicamente mediante `GET /api/review-image/{name}`, que responde 404 si la reseña no está en `approved`. Para revisar una foto antes de aprobar, abrir en `comentarios/` el archivo cuyo nombre aparece en la columna `Image`.
+  - El correo de aviso de nueva reseña no incluye la foto.
 
 ---
 
