@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JMX INTERIORS LTD | Edmonton Drywall, Basements & Painting</title>
     <meta name="description" content="JMX Interiors Ltd — drywall boarding, taping & mudding, basement development, texture removal, and interior painting in Edmonton, St. Albert, Sherwood Park, Spruce Grove & Leduc. Free quotes.">
-    <link rel="icon" type="image/webp" href="images/logo.webp">
+    <link rel="icon" type="image/png" href="images/logo.png">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="JMX INTERIORS LTD | Edmonton Drywall, Basements & Painting">
@@ -56,7 +56,7 @@
         /* --- HEADER --- */
         header {
             background: rgba(0,0,0,0.95);
-            padding: 15px 0;
+            padding: 10px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -72,12 +72,18 @@
             align-items: center;
         }
 
-	/* AJUSTE DE LOGO: Más grande y sin distorsión */
+        /* AJUSTE DE LOGO: Alta definición, proporción equilibrada y bordes limpios */
         .logo-container {
             display: flex;
             align-items: center;
-	}
-        .logo-img { height: 90px; width: auto; display: block; object-fit: contain; }
+        }
+        .logo-img {
+            height: 90px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            transition: height 0.3s ease;
+        }
 
 
         .nav-links { display: flex; gap: 30px; }
@@ -658,6 +664,7 @@
         }
 
         @media (max-width: 768px) {
+            .logo-img { height: 68px; }
             .nav-toggle { display: block; order: 1; }
             .btn-phone-link { order: 2; }
             nav { order: 3; width: 100%; }
@@ -680,7 +687,7 @@
     <header>
         <div class="container">
             <div class="logo-container">
-                <img src="images/logo.webp" alt="JMX Interiors" class="logo-img">
+                <img src="images/logo.png?v=2" alt="JMX Interiors" class="logo-img">
             </div>
 
             <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
@@ -704,7 +711,7 @@
     <section class="hero">
         <div class="hero-content">
             <h1>EXPERT<span> DRYWALL</span><br>& Interior Finishing </h1>
-            <p style="max-width: 800px; margin: 20px auto; line-height: 1.5;">Complete interior transformations.<br>Specializing in drywall, ceiling systems, restorations, and premium finishing.</p>
+            <p style="max-width: 800px; margin: 20px auto; line-height: 1.5;">Complete interior transformations.<br>Specializing in drywall, restorations, and premium finishing.</p>
             <div class="hero-trust">
                 <i class="fas fa-shield-alt"></i> Fully Licensed & Insured
             </div>
