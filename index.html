@@ -30,7 +30,10 @@
         "openingHoursSpecification": [
             { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "07:00", "closes": "19:00" }
         ],
-        "sameAs": ["https://instagram.com/jmxinteriors"]
+        "sameAs": [
+            "https://g.page/r/CQFh2LQU4BJqEBM",
+            "https://instagram.com/jmxinteriors"
+        ]
     }
     </script>
 
@@ -544,6 +547,88 @@
             color: #888;
         }
 
+        /* GOOGLE REVIEWS INTEGRATION */
+        .google-review-banner {
+            max-width: 780px;
+            margin: -15px auto 35px;
+            background: linear-gradient(135deg, #18191c 0%, #101114 100%);
+            border: 1px solid #2a2c30;
+            border-radius: 8px;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .google-review-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .google-review-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .google-review-icon i {
+            color: #4285F4;
+            font-size: 1.4rem;
+        }
+        .google-review-text h4 {
+            color: var(--white);
+            font-size: 0.95rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        .google-review-text p {
+            color: #aaa;
+            font-size: 0.78rem;
+            margin: 3px 0 0;
+            line-height: 1.4;
+        }
+        .btn-google-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #4285F4;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        }
+        .btn-google-action:hover {
+            background: #3367D6;
+            transform: translateY(-2px);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.45);
+        }
+        @media (max-width: 600px) {
+            .google-review-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+            .google-review-info {
+                flex-direction: column;
+            }
+            .btn-google-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         .reviews-container {
             max-width: 1100px;
             margin: 0 auto 30px;
@@ -929,6 +1014,22 @@
         <!-- Compact Rating Summary (Amazon / Google Style) -->
         <div id="reviews-summary" class="reviews-summary" style="display: none;"></div>
 
+        <!-- Google Review CTA Banner -->
+        <div class="google-review-banner">
+            <div class="google-review-info">
+                <div class="google-review-icon">
+                    <i class="fab fa-google"></i>
+                </div>
+                <div class="google-review-text">
+                    <h4>Review Us on Google</h4>
+                    <p>Have we completed a project for you? Help Edmonton homeowners find us!</p>
+                </div>
+            </div>
+            <a href="https://g.page/r/CQFh2LQU4BJqEBM/review" target="_blank" rel="noopener noreferrer" class="btn-google-action">
+                <i class="fas fa-star" style="color: #FBBC05;"></i> Write a Review
+            </a>
+        </div>
+
         <!-- Reviews Grid -->
         <div class="reviews-container" id="reviews-list"></div>
 
@@ -984,6 +1085,11 @@
             <div class="footer-item">
                 <h4>Service Area</h4>
                 <p>Edmonton, St. Albert, Sherwood Park, Spruce Grove & Leduc.</p>
+                <p style="margin-top: 10px;">
+                    <a href="https://g.page/r/CQFh2LQU4BJqEBM" target="_blank" rel="noopener noreferrer" style="color: var(--gold-color); font-weight: 700; text-decoration: none; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-map-marker-alt"></i> Find us on Google Maps &rarr;
+                    </a>
+                </p>
             </div>
             <div class="footer-item">
                 <h4>Trusted & Certified</h4>
@@ -994,10 +1100,11 @@
                 <p><i class="fas fa-city" style="color:var(--gold-color); margin-right:5px;"></i> Large Commercial Ready</p>
             </div>
             <div class="footer-item">
-                <h4>Follow Us</h4>
+                <h4>Connect & Review</h4>
 		<p>JMX INTERIORS LTD <br> Quality you can trust.</p>
                 <div class="social-icons">
-                    <a href="https://instagram.com/jmxinteriors" target="_blank" aria-label="Follow JMX Interiors on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://g.page/r/CQFh2LQU4BJqEBM" target="_blank" rel="noopener noreferrer" aria-label="Visit JMX Interiors on Google Maps" title="Google Maps Profile"><i class="fab fa-google"></i></a>
+                    <a href="https://instagram.com/jmxinteriors" target="_blank" rel="noopener noreferrer" aria-label="Follow JMX Interiors on Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
