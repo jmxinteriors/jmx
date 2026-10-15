@@ -4,6 +4,12 @@ This file provides context, architectural details, and operational guidance for 
 
 ---
 
+## Communication Channel (questions for the developer)
+
+If you hit a technical or process question you cannot resolve yourself, or an error that persists after a reasonable attempt, STOP instead of improvising and leave it in [canal-comentarios/](canal-comentarios/README.md). Follow that README exactly: one file per question, only that file is committed and pushed to `main`, and never include credentials, secrets or customers' personal data. Tell the user to notify the developer, and wait for the answer before continuing. Pushing anything outside `canal-comentarios/` to `main` deploys the site to production.
+
+---
+
 ## Project Overview
 
 Marketing website and serverless backend for **JMX Interiors Ltd** (Edmonton-based drywall, basement development, framing, and painting contractor), hosted and deployed on **Azure Static Web Apps (SWA)**.

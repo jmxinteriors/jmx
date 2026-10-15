@@ -1,6 +1,6 @@
 # Imagen opcional en comentarios (reseñas)
 
-Estado: EN EJECUCIÓN por Angel junto con Claude (no por otro agente ni persona). Pasos 0 al 6 completados; falta el paso 7 (guardar y publicar). No volver a ejecutar este plan.
+Estado: EN EJECUCIÓN por Angel junto con Claude (no por otro agente ni persona). COMPLETADO y publicado el 2026-10-14 (commit 95cc0cb). No volver a ejecutar este plan.
 
 ---
 
@@ -155,10 +155,10 @@ El agente actualiza README.md, CLAUDE.md y AGENTS.md únicamente donde se mencio
 - [x] 6.1. Actualizar README.md, CLAUDE.md y AGENTS.md solo donde mencionan columnas de `Reviews`, endpoints y el flujo de aprobación.
 
 ### Paso 7 — Cierre
-- [ ] 7.1. Resumen final y pedir autorización para commit (identidad de AGENTS.md).
-- [ ] 7.2. Pedir autorización aparte para publicar; desplegar con el comando de README.md, desde el directorio padre.
-- [ ] 7.3. Prueba real en producción guiada a la persona (comentario `PRUEBA` con foto, aprobar, ver, volver a `pending`, limpiar). Incluye revisión visual en escritorio y móvil.
-- [ ] 7.4. Llenar la sección "Revisión".
+- [x] 7.1. Resumen final y pedir autorización para commit (identidad de AGENTS.md).
+- [x] 7.2. Pedir autorización aparte para publicar; desplegar con el comando de README.md, desde el directorio padre.
+- [x] 7.3. Prueba real en producción guiada a la persona (comentario `PRUEBA` con foto, aprobar, ver, volver a `pending`, limpiar). Incluye revisión visual en escritorio y móvil.
+- [x] 7.4. Llenar la sección "Revisión".
 
 ## Riesgos / notas
 
@@ -170,4 +170,10 @@ El agente actualiza README.md, CLAUDE.md y AGENTS.md únicamente donde se mencio
 
 ## Revisión (se llena al terminar)
 
-_Pendiente._
+Ejecutado por Angel con Claude el 2026-10-14. Los 8 pasos se completaron con validación en cada uno.
+
+- Publicado en producción (commit `95cc0cb`, deploy verde). Verificado en línea: formulario con campo de foto, `/api/reviews` con campo `imagen`, proxy devolviendo 404 para fotos de reseñas pendientes e inexistentes, y una reseña real de prueba con foto aprobada que se vio bien en el sitio.
+- Pruebas por API: 8 casos de subida (sin foto, JPEG, PNG, WebP, >2 MB, texto disfrazado, base64 inválido, tipo no texto) y proxy con reseña pendiente/aprobada/nombres inválidos.
+- Antes de modificar el Excel de producción se hizo un respaldo (`quotes-reviews-respaldo-2026-10-14.xlsx`, junto al original). Tras la limpieza, las 10 reseñas originales coinciden con el respaldo (primeras 5 columnas), `Quotes` coincide e `Image` está vacía en las filas anteriores. Las 5 filas y las 4 fotos de prueba se borraron.
+- Hallazgos: (1) Excel en línea puede devolver valores anteriores unos segundos tras escribir (afecta pruebas inmediatas, no al uso normal); (2) el CSP bloquea `blob:`, por eso el navegador lee la foto como `data:`; (3) todo push a `main` despliega a producción (CLAUDE.md decía lo contrario; corregido); (4) la documentación decía `Estatus` pero la columna real es `Status` (corregido).
+- Pendiente opcional: borrar el archivo de respaldo cuando ya no haga falta.

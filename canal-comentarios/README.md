@@ -1,6 +1,6 @@
 # Canal de comunicación (agente de ejecución <-> desarrollo)
 
-Esta carpeta sirve para que el agente de quien ejecuta el plan de imágenes en comentarios (`task/todo.md`) deje dudas o problemas que no puede resolver, y para que desarrollo responda. Un push que solo toca esta carpeta NO publica el sitio (el workflow lo ignora).
+Esta carpeta sirve para que el agente de quien trabaja en este repositorio deje dudas técnicas o de proceso, o problemas que no puede resolver, y para que desarrollo responda. Aplica a cualquier tarea. Un push que solo toca esta carpeta NO publica el sitio (el workflow lo ignora).
 
 ## Reglas
 
@@ -30,7 +30,7 @@ Esta carpeta sirve para que el agente de quien ejecuta el plan de imágenes en c
 # NNN — Título corto
 
 - Estado: abierta | respondida | resuelta
-- Paso del plan: (número y nombre)
+- Tarea relacionada: (qué se estaba haciendo y, si hay plan, el paso)
 - Fecha:
 
 ## Qué se intentaba hacer
