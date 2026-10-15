@@ -4,6 +4,17 @@ This file provides context, architectural details, and operational guidance for 
 
 ---
 
+## Before You Start (always, before any task)
+
+Make sure you are working on the latest version of the repository. Do this first, every session, before reading code or making any change:
+
+1. Run `git fetch` and then `git status -sb`. If the branch is behind `origin/main`, run `git pull --rebase --autostash` (autostash keeps any local uncommitted changes safe).
+2. If the pull reports conflicts or fails, STOP and explain it to the user in plain words. Never discard, reset or force-push to get past it.
+3. If you cannot reach GitHub, tell the user and do not continue on a possibly outdated copy.
+4. After pulling, re-read this file (`AGENTS.md`) because it may have changed, and check `git log` for what changed since the last time.
+
+---
+
 ## Communication Channel (questions for the developer)
 
 If you hit a technical or process question you cannot resolve yourself, or an error that persists after a reasonable attempt, STOP instead of improvising and leave it in [canal-comentarios/](canal-comentarios/README.md). Follow that README exactly: one file per question, only that file is committed and pushed to `main`, and never include credentials, secrets or customers' personal data. Tell the user to notify the developer, and wait for the answer before continuing. Pushing anything outside `canal-comentarios/` to `main` deploys the site to production.
